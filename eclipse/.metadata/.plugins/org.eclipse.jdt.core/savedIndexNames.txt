@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 INDEX VERSION 1.127+C:\Users\¹ÎÁ¤\music_light\eclipse\.metadata\.plugins\org.eclipse.jdt.core
+=======
+INDEX VERSION 1.127+C:\Users\USER\music_light\eclipse\.metadata\.plugins\org.eclipse.jdt.core
+2380175872.index
+2842702082.index
+2073056864.index
+>>>>>>> 92377c4a581fe3d10c20357a0efd29d6a8083a15
