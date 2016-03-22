@@ -11,9 +11,11 @@
 		<item value="https://github.com/MusicLight/music_light.git"/>
 	</list>
 	<list key="CommitDialog.authorValues">
+		<item value="USER &lt;USER@192.168.0.16&gt;"/>
 		<item value="민정 &lt;민정@minjeong&gt;"/>
 	</list>
 	<list key="CommitDialog.committerValues">
+		<item value="USER &lt;USER@192.168.0.16&gt;"/>
 		<item value="민정 &lt;민정@minjeong&gt;"/>
 	</list>
 	<section name="GitImportWizard">
@@ -29,6 +31,10 @@
 			<item value="600"/>
 			<item value="400"/>
 		</list>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.pull.PullResultDialog.dialogBounds">
+		<item value="352" key="DIALOG_X_ORIGIN"/>
+		<item value="257" key="DIALOG_Y_ORIGIN"/>
 	</section>
 	<section name="org.eclipse.egit.ui.COMMIT_DIALOG_SECTION">
 		<item value="642" key="DIALOG_WIDTH"/>
