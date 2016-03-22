@@ -7,6 +7,9 @@
 	<item value="537" key="DIALOG_HEIGHT"/>
 	<item value="194" key="DIALOG_X_ORIGIN"/>
 	<item value="26" key="DIALOG_Y_ORIGIN"/>
+	<list key="RepositorySelectionPage.UsedUris">
+		<item value="https://github.com/MusicLight/music_light.git"/>
+	</list>
 	<list key="CommitDialog.authorValues">
 		<item value="민정 &lt;민정@minjeong&gt;"/>
 	</list>
