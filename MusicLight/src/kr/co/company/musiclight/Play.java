@@ -29,7 +29,8 @@ public class Play extends Activity{
 		
 		s= path+fileName;
 		
-		((TextView) findViewById(R.id.mypath)).setText("°æ·Î: "+ s);	
+		
+		
 		
 		start.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){
