@@ -170,7 +170,7 @@ public class FileList extends ListView {
 			/**
 			 * 파일/폴더를 선택할경우 두번눌러 어플 종료 카운터를 초기화 합니다
 			 */
-			MainActivity.kill = 0;
+			FileExplorer.kill = 0;
 		}
 	};
 
