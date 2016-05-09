@@ -28,9 +28,7 @@ public class Play extends Activity{
 		pause = (Button) findViewById(R.id.pause);
 		
 		s= path+fileName;
-		
-		
-		
+
 		
 		start.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){

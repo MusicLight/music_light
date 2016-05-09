@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 @SuppressLint("SdCardPath")
 public class FileExplorer extends Activity {
 	static int kill=0;
@@ -59,12 +58,7 @@ public class FileExplorer extends Activity {
         
     }
 	
-/*	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}*/
+
 	public void Listener(View target){
     	Intent intent = new Intent(getApplicationContext(), Play.class);
     	startActivity(intent);
