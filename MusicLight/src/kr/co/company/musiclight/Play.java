@@ -28,11 +28,11 @@ public class Play extends Activity{
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
 		
-		s= path;
-		s1 = fileName;
+		s= path+fileName;
 		
-		((TextView) findViewById(R.id.mypath)).setText("경로: "+ s);	
-		((TextView) findViewById(R.id.title)).setText("파일명: "+s1);
+		
+		((TextView) findViewById(R.id.mypath)).setText("경로: "+ path);	
+		((TextView) findViewById(R.id.title)).setText("파일명: "+fileName);
 		
 		start.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){
