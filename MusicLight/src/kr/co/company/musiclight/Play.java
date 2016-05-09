@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class Play extends Activity{
 	MediaPlayer mp = null;
 	TextView v;
-	String s;
+	String s, s1;
 	Button start, pause;
 	
 	@Override
@@ -23,12 +23,16 @@ public class Play extends Activity{
 		Intent intent = getIntent();
 		String path = intent.getExtras().getString("path");
 		String fileName = intent.getExtras().getString("fileName");
+		String title = intent.getExtras().getString("title");
 		
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
 		
 		s= path+fileName;
-
+		s1 = fileName;
+		
+		((TextView) findViewById(R.id.mypath)).setText("경로: "+ s);	
+		((TextView) findViewById(R.id.title)).setText("파일명: "+s1);
 		
 		start.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){
