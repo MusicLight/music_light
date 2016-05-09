@@ -29,8 +29,12 @@ public class Play extends Activity{
 		
 		s= path+fileName;
 		
+<<<<<<< HEAD
 		
 		
+=======
+		((TextView) findViewById(R.id.mypath)).setText("°æ·Î: "+ s);	
+>>>>>>> branch 'master' of https://github.com/MusicLight/music_light.git
 		
 		start.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){
