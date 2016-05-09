@@ -18,7 +18,7 @@ public class FileExplorer extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.file_explorer);
 		
-		FileList _FileList = new FileList(this);
+		FileList _FileList = new FileList(this);   
 		
         _FileList.setOnPathChangedListener(new OnPathChangedListener() {
 			@Override
