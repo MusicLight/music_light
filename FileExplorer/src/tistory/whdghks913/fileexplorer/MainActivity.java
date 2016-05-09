@@ -3,7 +3,6 @@ package tistory.whdghks913.fileexplorer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 @SuppressLint("SdCardPath")
 public class MainActivity extends Activity {
 	static int kill=0;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,24 +34,14 @@ public class MainActivity extends Activity {
 			public void onSelected(String path, String fileName) {
 				// TODO Auto-generated method stub
 				((TextView) findViewById(R.id.FilePath)).setText("°æ·Î: "+path+fileName);
-				
-				
-				MediaPlayer mp = null;
-				
-					String file;
-					
-					file =path+fileName;
-					mp= new MediaPlayer();
-					try{
-						mp.setDataSource(file);
-						mp.prepare();
-						
-					}
-					catch(Exception e){
-						e.printStackTrace();
-					}
-					mp.start();
+				Intent intent = new Intent(getApplicationContext(), Play.class);
+				intent.putExtra("path", path);
+				intent.putExtra("fileName", fileName);
+				startActivity(intent);				
 				}
+			
+			
+			
 				
 				
 									
