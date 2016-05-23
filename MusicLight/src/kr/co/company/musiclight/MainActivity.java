@@ -11,9 +11,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 	}
-
+	
 	public void FileListener(View target) {
 		Intent intent = new Intent(getApplicationContext(), FileExplorer.class);
 		startActivity(intent);
