@@ -59,6 +59,4 @@ public class Play extends Activity{
 			}
 		});
 		}
-			
-	
 }

@@ -38,14 +38,8 @@ public class FileExplorer extends Activity {
             intent.putExtra("fileName", fileName);
             startActivity(intent);            
             }
-         
-         
-         
-            
-            
-                           
-               
    });
+        
         LinearLayout layout = (LinearLayout) findViewById(R.id.LinearLayout01);
         layout.addView(_FileList);
         
@@ -53,12 +47,8 @@ public class FileExplorer extends Activity {
         _FileList.setFocusable(true);
         _FileList.setFocusableInTouchMode(true);
         
-        
-        
-        
     }
    
-
    public void Listener(View target){
        Intent intent = new Intent(getApplicationContext(), Play.class);
        startActivity(intent);
@@ -69,17 +59,4 @@ public class FileExplorer extends Activity {
        android.os.Process.killProcess(android.os.Process.myPid());
    }
    
-   @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  { // 뒤로가기 키를 눌렀을때
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-           if(kill==0){
-              kill++;
-              Toast.makeText(this, "종료하시려면 한번더 누르세요", Toast.LENGTH_SHORT).show();
-           }else
-              _finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 }
