@@ -16,9 +16,7 @@ void setup() {
 }
 
 
-
 void loop() {
-
   Serial.println("HIGH");
   digitalWrite(relay1, HIGH); // HIGH인가
   delay(2000);
@@ -34,5 +32,4 @@ void loop() {
   Serial.println("LOW");
   digitalWrite(relay2, LOW); // LOW인가
   delay(2000);
-
 }
