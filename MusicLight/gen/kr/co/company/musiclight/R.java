@@ -26,8 +26,9 @@ public final class R {
     }
     public static final class id {
         public static final int FilePath=0x7f080003;
+        public static final int ImageView01=0x7f080008;
         public static final int LinearLayout01=0x7f080000;
-        public static final int action_settings=0x7f080008;
+        public static final int action_settings=0x7f080009;
         public static final int button1=0x7f080001;
         public static final int explorer=0x7f080002;
         public static final int mypath=0x7f080004;
