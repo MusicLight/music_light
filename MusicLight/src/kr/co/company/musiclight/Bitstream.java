@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 
-import android.preference.PreferenceActivity.Header;
-
 public final class Bitstream implements BitstreamErrors
 {
 	/**
@@ -198,7 +196,10 @@ public final class Bitstream implements BitstreamErrors
 		}
 	}
 
-	
+	/**
+	 * Close the Bitstream.
+	 * @throws BitstreamException
+	 */
 	public void close() throws BitstreamException
 	{
 		try
@@ -216,16 +217,16 @@ public final class Bitstream implements BitstreamErrors
 	 * @return the Header describing details of the frame read,
 	 *	or null if the end of the stream has been reached.
 	 */
-	public kr.co.company.musiclight.Header readFrame() throws BitstreamException
+	public Header readFrame() throws BitstreamException
 	{
-		kr.co.company.musiclight.Header result = null;
+		Header result = null;
 		try
 		{
-			kr.co.company.musiclight.Header result1 = readNextFrame();
+			result = readNextFrame();
 			// E.B, Parse VBR (if any) first frame.
 			if (firstframe == true)
 			{
-				result1.parseVBR(frame_bytes);
+				result.parseVBR(frame_bytes);
 				firstframe = false;
 			}			
 		}
@@ -238,7 +239,7 @@ public final class Bitstream implements BitstreamErrors
 				try
 				{
 					closeFrame();
-					 result = readNextFrame();
+					result = readNextFrame();
 				}
 				catch (BitstreamException e)
 				{
@@ -280,7 +281,6 @@ public final class Bitstream implements BitstreamErrors
 	private void nextFrame() throws BitstreamException
 	{
 		// entire frame is read by the header class.
-		///////////////////////////////////////////
 		header.read_header(this, crc);
 	}
 
