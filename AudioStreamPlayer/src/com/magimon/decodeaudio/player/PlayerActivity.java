@@ -1,20 +1,29 @@
 package com.magimon.decodeaudio.player;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import com.magimon.decodeaudio.player.AudioStreamPlayer.State;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
-import com.magimon.decoceaudio.decoder.AudioStreamPlayer;
-import com.magimon.decoceaudio.decoder.AudioStreamPlayer.State;
-import com.magimon.decoceaudio.decoder.OnAudioStreamInterface;
+import android.widget.TextView;
 
 public class PlayerActivity extends Activity implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener
 {
@@ -29,7 +38,27 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 
 	private ProgressDialog mProgressDialog = null;
 
-	AudioStreamPlayer mAudioPlayer = null;
+	AudioStreamPlayer mAudioPlayer = new AudioStreamPlayer();
+	 int frequency = 4000;
+	 int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+	 int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+	 private RealDoubleFFT transformer;
+	 int blockSize = 256;
+	 boolean started = false;
+	 ImageView imageView;
+	 Bitmap bitmap;
+	 Canvas canvas;
+	 Paint paint;
+	 
+	 byte buf[]= mAudioPlayer.FFTFile();
+	  
+	
+	
+	 
+	 TextView t;
+	 FFTAudio audiotask;
+	 
+	 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +80,15 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		mSeekProgress.setProgress(0);
 
 		updatePlayer(State.Stopped);
+		
+		imageView = (ImageView)findViewById(R.id.ImageView01);
+        bitmap = Bitmap.createBitmap((int)256, (int)100, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        paint = new Paint();
+        paint.setColor(Color.GREEN);
+        imageView.setImageBitmap(bitmap);
+      
+        
 	}
 
 	@Override
@@ -304,8 +342,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 
 		this.mAudioPlayer.seekTo(progress);
 	}
-
-	@Override
+	
 	public void onClick(View v)
 	{
 		switch (v.getId())
@@ -337,4 +374,69 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		}
 	}
 
+	
+	private	class FFTAudio extends AsyncTask<Void, double[], Void>{
+	    @Override
+	    protected Void doInBackground(Void... params) {
+	    	double[] toTransform = new double[blockSize];
+	    	for(int i = 0; i < blockSize ; i++){
+	    	    toTransform[i] = (double)buf[i] / Short.MAX_VALUE; // 부호 있는 16비트
+	    	    }
+	    
+		    	
+	    
+        
+        transformer.ft(toTransform);
+        // publishProgress를 호출하면 onProgressUpdate가 호출된다.
+        publishProgress(toTransform);
+	   	
+        
+	    
+	    
+	    return null;
+	    }
+	
+	
+	@Override
+	public void onProgressUpdate(double[]... toTransform) {
+	    canvas.drawColor(Color.BLACK);
+	   
+	    for(int i = 0; i < toTransform[0].length; i++){
+	    int x = i;
+	    int downy = (int) (100 - (toTransform[0][i] * 10));
+	    int upy = 100;
+	   
+	    canvas.drawLine(x, downy, x, upy, paint);
+	    }
+	    imageView.invalidate();
+	    
+	    
+	    }
+	
+	public void onClick(View arg0) {
+		if(started){
+		    started = false;
+		    audiotask.cancel(true);
+		    }else{
+		    started = true;
+		    audiotask = new FFTAudio();
+		    audiotask.execute();
+	}
+	
+	
+	
+	
+	
+
+	
 }
+
+
+	
+	
+}
+
+
+}
+	
+	
