@@ -10,7 +10,7 @@ package kr.co.company.musiclight;
  * packing 8 bits to a byte and extracting. 
  * <p> 
  */
-   
+
 // REVIEW: there is no range checking, so buffer underflow or overflow
 // can silently occur.
 final class BitReserve
