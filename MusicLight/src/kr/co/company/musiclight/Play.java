@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
@@ -20,7 +19,6 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceActivity.Header;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +30,7 @@ public class Play extends Activity implements OnClickListener {
 	MediaPlayer mp = null;
 	TextView v;
 	String s, s1;
-	Button start, pause;
+	Button start, pause, on;
 	int frequency = 8000;
 	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
@@ -67,6 +65,7 @@ public class Play extends Activity implements OnClickListener {
 
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
+		on = (Button) findViewById(R.id.light_on);
 
 		s = path + fileName;
 

@@ -27,10 +27,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="중지" />
-    
+
+    <Button
+        android:id="@+id/light_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="조명켜기" />
+
     <ImageView
-android:id="@+id/ImageView01"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content" />
+        android:id="@+id/ImageView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
