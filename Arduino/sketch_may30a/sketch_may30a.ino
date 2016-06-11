@@ -9,6 +9,8 @@ int relay2 = 3;
 int relay3 = 4;
 int relay4 = 5;
 
+byte arr[4] = {1,2,3,4};
+
 
 void setup() {
   BTSerial.begin(9600);
@@ -27,24 +29,48 @@ void setup() {
 void loop() {
 
   if (BTSerial.available()) { // 블루투스로 데이터 수신
-    byte data = BTSerial.read(); // 수신 받은 데이터 저장
-    Serial.write(data); // 수신된 데이터 시리얼 모니터로 출력
-    buffer[bufferPosition++] = data; // 수신 받은 데이터를 버퍼에 저장
+    //byte data = BTSerial.read(); // 수신 받은 데이터 저장
+    BTSerial.write(arr[4]);
+    Serial.write(arr[4]); // 수신된 데이터 시리얼 모니터로 출력
+    //buffer[bufferPosition++] = data; // 수신 받은 데이터를 버퍼에 저장
+    bufferPosition = 0;
 
-    if (data == 'a') { // 블루투스를 통해 'a' 이 들어오면
-      if (temp == 0) {
-        digitalWrite(relay1, HIGH);
-        temp = 1;
-      } else {
-        digitalWrite(relay1, LOW);
-        temp = 0;
+    /* if (data == 'a') { // 블루투스를 통해 'a' 이 들어오면
+        if (temp == 0) {
+          digitalWrite(relay1, HIGH);
+          temp = 1;
+        } else {
+          digitalWrite(relay1, LOW);
+          temp = 0;
+        }
       }
+
+      if (data == '\n') { // 문자열 종료 표시
+        buffer[bufferPosition] = '\0';
+        bufferPosition = 0;
+      }
+      }*/
+
+    switch (arr[0])
+    {
+      case 0 :
+        digitalWrite(relay1, HIGH);
+        break;
+
+      case 1:
+        digitalWrite(relay2, HIGH);
+        break;
     }
 
-    if (data == '\n') { // 문자열 종료 표시
-      buffer[bufferPosition] = '\0';
-      bufferPosition = 0;
+    switch (arr[1])
+    {
+      case 0:
+        digitalWrite(relay3, HIGH);
+        break;
+
+      case 1:
+        digitalWrite(relay4, HIGH);
+        break;
     }
   }
-
 }

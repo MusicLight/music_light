@@ -1,7 +1,6 @@
 package com.magimon.decodeaudio.player;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import com.magimon.decodeaudio.player.AudioStreamPlayer.State;
 
@@ -12,11 +11,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
