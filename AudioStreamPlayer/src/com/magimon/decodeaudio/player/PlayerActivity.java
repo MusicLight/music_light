@@ -1,6 +1,8 @@
 package com.magimon.decodeaudio.player;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import com.magimon.decodeaudio.player.AudioStreamPlayer.State;
 
@@ -11,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioFormat;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,16 +46,10 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	 Bitmap bitmap;
 	 Canvas canvas;
 	 Paint paint;
-	 
-	 byte buf[]= mAudioPlayer.FFTFile();
+	 	 
+	 byte[] buf;
+	 double[] toTransform = new double[blockSize] ;
 	  
-	
-	
-	 
-	 TextView t;
-	 FFTAudio audiotask;
-	 
-	 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -83,8 +78,14 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
         paint = new Paint();
         paint.setColor(Color.GREEN);
         imageView.setImageBitmap(bitmap);
-      
         
+        
+        
+        
+        //transformer.ft(toTransform);
+        //onProgressUpdate(toTransform);
+      
+
 	}
 
 	@Override
@@ -92,8 +93,10 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	{
 		super.onDestroy();
 
+
 		stop();
 	}
+	
 
 	private void updatePlayer(AudioStreamPlayer.State state)
 	{
@@ -153,6 +156,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 			break;
 		}
 		}
+		
 	}
 
 	private void pause()
@@ -171,10 +175,18 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		mAudioPlayer.setOnAudioStreamInterface(this);
 
 		mAudioPlayer.setUrlString("/storage/emulated/0/Music/aaa.mp3");
+		
 
 		try
 		{
+			
 			mAudioPlayer.play();
+			buf= mAudioPlayer.fftarr;
+			 
+		
+			//ByteArrayToDoubleArray(buf);
+			//transformer.ft(toTransform);
+			
 		}
 		catch (IOException e)
 		{
@@ -370,36 +382,13 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		}
 	}
 
-	
-	private	class FFTAudio extends AsyncTask<Void, double[], Void>{
-	    @Override
-	    protected Void doInBackground(Void... params) {
-	    	double[] toTransform = new double[blockSize];
-	    	for(int i = 0; i < blockSize ; i++){
-	    	    toTransform[i] = (double)buf[i] / Short.MAX_VALUE; // 부호 있는 16비트
-	    	    }
-	    
-		    	
-	    
-        
-        transformer.ft(toTransform);
-        // publishProgress를 호출하면 onProgressUpdate가 호출된다.
-        publishProgress(toTransform);
-	   	
-        
-	    
-	    
-	    return null;
-	    }
-	
-	
-	@Override
-	public void onProgressUpdate(double[]... toTransform) {
+		
+	public void onProgressUpdate(double[] toTransform) {
 	    canvas.drawColor(Color.BLACK);
 	   
-	    for(int i = 0; i < toTransform[0].length; i++){
+	    for(int i = 0; i < toTransform.length; i++){
 	    int x = i;
-	    int downy = (int) (100 - (toTransform[0][i] * 10));
+	    int downy = (int) (100 - (toTransform[i] * 10));
 	    int upy = 100;
 	   
 	    canvas.drawLine(x, downy, x, upy, paint);
@@ -409,28 +398,25 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	    
 	    }
 	
-	public void onClick(View arg0) {
-		if(started){
-		    started = false;
-		    audiotask.cancel(true);
-		    }else{
-		    started = true;
-		    audiotask = new FFTAudio();
-		    audiotask.execute();
-	}
-	
-	
-	
-	
+	////////////////
+	/*
+	public double[] ByteArrayToDoubleArray(byte[] buf) {
+		  int cnt = buf.length / Double.SIZE;
+		  long temp;
+		  //double result[] = new double[cnt];
+		  int i = 0;
+		  for(int idx = 0 ; idx < cnt ; ++idx) {
+		   temp = 0;
+		   for(int shift = 0 ; shift < 64 ; shift += 8) {
+		    temp |= ((long)(buf[i] & 0xff)) << shift;
+		    i++;
+		   }
+		   toTransform[idx] = Double.longBitsToDouble(temp);
+		  }
+		  return toTransform; 
+		 }  */
 	
 
-	
-}
-
-
-	
-	
-}
 
 
 }

@@ -27,7 +27,7 @@ public class AudioStreamPlayer
 	private volatile boolean isPause = false;
 
 	protected OnAudioStreamInterface mListener = null;
-	byte[] chunk;
+	byte[] fftarr;
 	
 
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
@@ -264,13 +264,20 @@ public class AudioStreamPlayer
 
 				int outputBufIndex = res;
 				ByteBuffer buf = codecOutputBuffers[outputBufIndex];
-
-				 byte[] chunk = new byte[info.size];
+				
+				final byte[] chunk = new byte[info.size];
 				buf.get(chunk);
 				buf.clear();
+				
+				fftarr = new byte[chunk.length];
+
+				for(int i=0;i<chunk.length;i++){
+					fftarr[i]=chunk[i];
+				}
 				if (chunk.length > 0)
 				{
 					mAudioTrack.write(chunk, 0, chunk.length);
+					
 					if (this.mState != State.Playing)
 					{
 						mAudioPlayerHandler.onAudioPlayerPlayerStart(AudioStreamPlayer.this);
@@ -370,10 +377,9 @@ public class AudioStreamPlayer
 		isPause = false;
 	}
 	
-	public byte[]  FFTFile()
+	public  byte[]  FFTFile()
 	{
-		return chunk;
+		return fftarr;
 	}
-	
 	
 }
