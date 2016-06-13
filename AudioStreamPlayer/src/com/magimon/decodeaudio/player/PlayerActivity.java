@@ -1,9 +1,6 @@
 package com.magimon.decodeaudio.player;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.magimon.decodeaudio.player.RealDoubleFFT;
 import com.magimon.decodeaudio.player.AudioStreamPlayer.State;
 
@@ -37,16 +34,16 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	private ProgressDialog mProgressDialog = null;
 
 	AudioStreamPlayer mAudioPlayer = new AudioStreamPlayer();
-	 int frequency = 4000;
+	 int frequency = 8000;
 	 int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 	 int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
 	 int blockSize = 256;
 	 private RealDoubleFFT transformer; 
-	 boolean started = false;
 	 ImageView imageView;
 	 Bitmap bitmap;
 	 Canvas canvas;
 	 Paint paint;
+	 boolean started = false;
 	 	 
 	 
 	 double[] toTransform = new double[blockSize] ;
@@ -57,6 +54,8 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.audio_stream_player);
+		
+		transformer = new RealDoubleFFT(blockSize);
 
 		mPlayButton = (Button) this.findViewById(R.id.button_play);
 		mPlayButton.setOnClickListener(this);
@@ -80,7 +79,9 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
         paint.setColor(Color.GREEN);
         imageView.setImageBitmap(bitmap);
         
-        transformer = new RealDoubleFFT(blockSize);   
+        
+        
+        
       
 	}
 
@@ -177,10 +178,13 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		{
 			
 			mAudioPlayer.play();
-			toTransform=mAudioPlayer.fftarr;
+			while(started){
+				
+					toTransform=mAudioPlayer.fftarr;
+				transformer.ft(toTransform);
+				onProgressUpdate(toTransform);
+			}
 			
-			//transformer.ft(toTransform);
-			//onProgressUpdate(toTransform);
 		}
 		catch (IOException e)
 		{
@@ -356,15 +360,20 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 				if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause)
 				{
 					mAudioPlayer.pauseToPlay();
+					started = true;
+					
 				}
 				else
 				{
 					pause();
+					started = false;
+					
 				}
 			}
 			else
 			{
 				play();
+				started = true;
 			}
 			break;
 		}

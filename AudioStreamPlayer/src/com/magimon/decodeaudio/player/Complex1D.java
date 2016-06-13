@@ -1,9 +1,7 @@
 package com.magimon.decodeaudio.player;
-/**
-  * Construct a 1-D complex data sequence.
-*/
+
 public class Complex1D
-{   
+{
 /**
   * <em>x</em>[<em>i</em>] is the real part of <em>i</em>-th complex data.
 */
