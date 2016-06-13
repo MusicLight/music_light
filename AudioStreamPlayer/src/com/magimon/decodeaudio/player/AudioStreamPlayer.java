@@ -27,7 +27,7 @@ public class AudioStreamPlayer
 	private volatile boolean isPause = false;
 
 	protected OnAudioStreamInterface mListener = null;
-	byte[] fftarr;
+	double[] fftarr;
 	
 
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
@@ -269,10 +269,10 @@ public class AudioStreamPlayer
 				buf.get(chunk);
 				buf.clear();
 				
-				fftarr = new byte[chunk.length];
+				fftarr = new double[chunk.length];
 
 				for(int i=0;i<chunk.length;i++){
-					fftarr[i]=chunk[i];
+					fftarr[i]=(double)chunk[i];
 				}
 				if (chunk.length > 0)
 				{
@@ -377,9 +377,5 @@ public class AudioStreamPlayer
 		isPause = false;
 	}
 	
-	public  byte[]  FFTFile()
-	{
-		return fftarr;
-	}
-	
+		
 }

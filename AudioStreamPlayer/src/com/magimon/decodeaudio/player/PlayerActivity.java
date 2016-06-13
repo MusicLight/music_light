@@ -47,7 +47,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	 Canvas canvas;
 	 Paint paint;
 	 	 
-	 byte[] buf;
+	 
 	 double[] toTransform = new double[blockSize] ;
 	  
 
@@ -78,12 +78,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
         paint = new Paint();
         paint.setColor(Color.GREEN);
         imageView.setImageBitmap(bitmap);
-        
-        
-        
-        
-        //transformer.ft(toTransform);
-        //onProgressUpdate(toTransform);
+       
       
 
 	}
@@ -181,12 +176,10 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		{
 			
 			mAudioPlayer.play();
-			buf= mAudioPlayer.fftarr;
-			 
-		
-			//ByteArrayToDoubleArray(buf);
-			//transformer.ft(toTransform);
+			toTransform= mAudioPlayer.fftarr;
 			
+			//transformer.ft(toTransform);
+			//onProgressUpdate(toTransform);
 		}
 		catch (IOException e)
 		{
@@ -398,23 +391,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	    
 	    }
 	
-	////////////////
-	/*
-	public double[] ByteArrayToDoubleArray(byte[] buf) {
-		  int cnt = buf.length / Double.SIZE;
-		  long temp;
-		  //double result[] = new double[cnt];
-		  int i = 0;
-		  for(int idx = 0 ; idx < cnt ; ++idx) {
-		   temp = 0;
-		   for(int shift = 0 ; shift < 64 ; shift += 8) {
-		    temp |= ((long)(buf[i] & 0xff)) << shift;
-		    i++;
-		   }
-		   toTransform[idx] = Double.longBitsToDouble(temp);
-		  }
-		  return toTransform; 
-		 }  */
+	
 	
 
 
