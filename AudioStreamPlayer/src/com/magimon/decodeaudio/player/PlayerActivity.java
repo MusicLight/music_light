@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.magimon.decodeaudio.player.RealDoubleFFT;
 import com.magimon.decodeaudio.player.AudioStreamPlayer.State;
 
 import android.app.Activity;
@@ -39,8 +40,8 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	 int frequency = 4000;
 	 int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 	 int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-	 private RealDoubleFFT transformer;
 	 int blockSize = 256;
+	 private RealDoubleFFT transformer; 
 	 boolean started = false;
 	 ImageView imageView;
 	 Bitmap bitmap;
@@ -78,9 +79,9 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
         paint = new Paint();
         paint.setColor(Color.GREEN);
         imageView.setImageBitmap(bitmap);
-       
+        
+        transformer = new RealDoubleFFT(blockSize);   
       
-
 	}
 
 	@Override
@@ -176,7 +177,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		{
 			
 			mAudioPlayer.play();
-			toTransform= mAudioPlayer.fftarr;
+			toTransform=mAudioPlayer.fftarr;
 			
 			//transformer.ft(toTransform);
 			//onProgressUpdate(toTransform);

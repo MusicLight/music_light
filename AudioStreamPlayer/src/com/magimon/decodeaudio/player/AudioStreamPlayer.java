@@ -272,7 +272,7 @@ public class AudioStreamPlayer
 				fftarr = new double[chunk.length];
 
 				for(int i=0;i<chunk.length;i++){
-					fftarr[i]=(double)chunk[i];
+					fftarr[i]=(double)chunk[i]/Byte.MAX_VALUE;
 				}
 				if (chunk.length > 0)
 				{
