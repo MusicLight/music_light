@@ -44,6 +44,7 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	 Canvas canvas;
 	 Paint paint;
 	 boolean started = false;
+	 byte[] aaa ;
 	 	 
 	 
 	 double[] toTransform = new double[blockSize] ;
@@ -182,6 +183,10 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 				
 					toTransform=mAudioPlayer.fftarr;
 				transformer.ft(toTransform);
+				for(int i=0;i<toTransform.length;i++){
+					aaa[i]=(byte)toTransform[i];
+				}
+				
 				onProgressUpdate(toTransform);
 			}
 			
