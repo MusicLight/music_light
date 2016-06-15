@@ -370,15 +370,17 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 				}
 				else
 				{
-					pause();
 					started = false;
+					pause();
+					
 					
 				}
 			}
 			else
 			{
-				play();
 				started = true;
+				play();
+				
 			}
 			break;
 		}
