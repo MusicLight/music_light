@@ -27,7 +27,7 @@ public class AudioStreamPlayer
 	private volatile boolean isPause = false;
 
 	protected OnAudioStreamInterface mListener = null;
-	double[] fftarr;
+	byte[] fftarr;
 	
 
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
@@ -269,11 +269,9 @@ public class AudioStreamPlayer
 				buf.get(chunk);
 				buf.clear();
 				
-				fftarr = new double[chunk.length];
+				fftarr = new byte[chunk.length];
 
-				for(int i=0;i<chunk.length;i++){
-					fftarr[i]=(double)chunk[i]/Byte.MAX_VALUE;
-				}
+				
 				if (chunk.length > 0)
 				{
 					mAudioTrack.write(chunk, 0, chunk.length);

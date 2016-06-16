@@ -80,6 +80,8 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
         paint.setColor(Color.GREEN);
         imageView.setImageBitmap(bitmap);
         
+        transformer = new RealDoubleFFT(blockSize);
+        
         
         
         
@@ -181,11 +183,12 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 			mAudioPlayer.play();
 			while(started){
 				
-					toTransform=mAudioPlayer.fftarr;
+					aaa=mAudioPlayer.fftarr;
+					for(int i=0;i<aaa.length;i++){
+						toTransform[i]=(double)aaa[i]/Byte.MAX_VALUE;
+					}
 				transformer.ft(toTransform);
-				for(int i=0;i<toTransform.length;i++){
-					aaa[i]=(byte)toTransform[i];
-				}
+				
 				
 				onProgressUpdate(toTransform);
 			}
