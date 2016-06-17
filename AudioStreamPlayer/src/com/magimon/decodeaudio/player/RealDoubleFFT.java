@@ -14,6 +14,7 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed
      public double norm_factor;
      private double wavetable[];
      private int ndim;
+     
 
 /**
   * Construct a wavenumber table with size <em>n</em>.
@@ -62,8 +63,8 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed
      public void ft(double x[])
      {
          if(x.length != ndim)
-              throw new IllegalArgumentException("The length of data can not match that of the wavetable");
-         rfftf(ndim, x, wavetable);
+             //throw new IllegalArgumentException("The length of data can not match that of the wavetable");
+    	 rfftf(ndim, x, wavetable);
      }
 
 /**
@@ -159,5 +160,6 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed
          }
          rfftb(ndim, y, wavetable);
      }
-
 }
+
+

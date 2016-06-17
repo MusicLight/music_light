@@ -265,11 +265,14 @@ public class AudioStreamPlayer
 				int outputBufIndex = res;
 				ByteBuffer buf = codecOutputBuffers[outputBufIndex];
 				
-				final byte[] chunk = new byte[info.size];
+				final byte[] chunk = new byte[PlayerActivity.blockSize];    //info.size
 				buf.get(chunk);
 				buf.clear();
 				
 				fftarr = new byte[chunk.length];
+				for(int i=0;i<chunk.length;i++){
+					fftarr[i]=chunk[i];
+				}
 
 				
 				if (chunk.length > 0)

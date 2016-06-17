@@ -20,8 +20,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class PlayerActivity extends Activity implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener
-{
+public class PlayerActivity extends Activity
+		implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener {
 
 	private Button mPlayButton = null;
 	private Button mStopButton = null;
@@ -34,28 +34,24 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	private ProgressDialog mProgressDialog = null;
 
 	AudioStreamPlayer mAudioPlayer = new AudioStreamPlayer();
-	 int frequency = 8000;
-	 int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
-	 int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-	 int blockSize = 256;
-	 private RealDoubleFFT transformer; 
-	 ImageView imageView;
-	 Bitmap bitmap;
-	 Canvas canvas;
-	 Paint paint;
-	 boolean started = false;
-	 byte[] aaa ;
-	 	 
-	 
-	 double[] toTransform = new double[blockSize] ;
-	  
+	int frequency = 8000;
+	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+	static int blockSize = 256;
+	private RealDoubleFFT transformer;
+	ImageView imageView;
+	Bitmap bitmap;
+	Canvas canvas;
+	Paint paint;
+	boolean started = false;
+	byte[] aaa;
+	double[] toTransform = new double[blockSize];
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.audio_stream_player);
-		
+
 		transformer = new RealDoubleFFT(blockSize);
 
 		mPlayButton = (Button) this.findViewById(R.id.button_play);
@@ -72,40 +68,27 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		mSeekProgress.setProgress(0);
 
 		updatePlayer(State.Stopped);
-		
-		imageView = (ImageView)findViewById(R.id.ImageView01);
-        bitmap = Bitmap.createBitmap((int)256, (int)100, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(bitmap);
-        paint = new Paint();
-        paint.setColor(Color.GREEN);
-        imageView.setImageBitmap(bitmap);
-        
-        transformer = new RealDoubleFFT(blockSize);
-        
-        
-        
-        
-      
+
+		imageView = (ImageView) findViewById(R.id.ImageView01);
+		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
+		canvas = new Canvas(bitmap);
+		paint = new Paint();
+		paint.setColor(Color.GREEN);
+		imageView.setImageBitmap(bitmap);
+
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
-
 
 		stop();
 	}
-	
 
-	private void updatePlayer(AudioStreamPlayer.State state)
-	{
-		switch (state)
-		{
-		case Stopped:
-		{
-			if (mProgressDialog != null)
-			{
+	private void updatePlayer(AudioStreamPlayer.State state) {
+		switch (state) {
+		case Stopped: {
+			if (mProgressDialog != null) {
 				mProgressDialog.cancel();
 				mProgressDialog.dismiss();
 
@@ -123,10 +106,8 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 			break;
 		}
 		case Prepare:
-		case Buffering:
-		{
-			if (mProgressDialog == null)
-			{
+		case Buffering: {
+			if (mProgressDialog == null) {
 				mProgressDialog = new ProgressDialog(this);
 			}
 			mProgressDialog.show();
@@ -138,14 +119,11 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 			mTextDuration.setText("00:00");
 			break;
 		}
-		case Pause:
-		{
+		case Pause: {
 			break;
 		}
-		case Playing:
-		{
-			if (mProgressDialog != null)
-			{
+		case Playing: {
+			if (mProgressDialog != null) {
 				mProgressDialog.cancel();
 				mProgressDialog.dismiss();
 
@@ -156,54 +134,45 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 			break;
 		}
 		}
-		
+
 	}
 
-	private void pause()
-	{
-		if (this.mAudioPlayer != null)
-		{
+	private void pause() {
+		if (this.mAudioPlayer != null) {
 			this.mAudioPlayer.pause();
 		}
 	}
 
-	private void play()
-	{
+	private void play()  {
 		releaseAudioPlayer();
 
 		mAudioPlayer = new AudioStreamPlayer();
 		mAudioPlayer.setOnAudioStreamInterface(this);
 
 		mAudioPlayer.setUrlString("/storage/emulated/0/Music/aaa.mp3");
-		
 
-		try
-		{
-			
+		try {
 			mAudioPlayer.play();
-			while(started){
-				
-					aaa=mAudioPlayer.fftarr;
-					for(int i=0;i<aaa.length;i++){
-						toTransform[i]=(double)aaa[i]/Byte.MAX_VALUE;
-					}
-				transformer.ft(toTransform);
-				
-				
-				onProgressUpdate(toTransform);
+			aaa = mAudioPlayer.fftarr;
+
+			for (int i = 0; i < blockSize; i++) {
+				toTransform[i] = (double) aaa[i] / Byte.MAX_VALUE;
 			}
 			
-		}
-		catch (IOException e)
-		{
+			transformer.ft(toTransform);
+			// onProgressUpdate(toTransform);
+		} 
+		
+		catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+
 	}
 
-	private void releaseAudioPlayer()
-	{
-		if (mAudioPlayer != null)
-		{
+	private void releaseAudioPlayer() {
+		if (mAudioPlayer != null) {
 			mAudioPlayer.stop();
 			mAudioPlayer.release();
 			mAudioPlayer = null;
@@ -211,37 +180,29 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 		}
 	}
 
-	private void stop()
-	{
-		if (this.mAudioPlayer != null)
-		{
+	private void stop() {
+		if (this.mAudioPlayer != null) {
 			this.mAudioPlayer.stop();
 		}
 	}
 
 	@Override
-	public void onAudioPlayerStart(AudioStreamPlayer player)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerStart(AudioStreamPlayer player) {
+		runOnUiThread(new Runnable() {
 
 			@Override
-			public void run()
-			{
+			public void run() {
 				updatePlayer(State.Playing);
 			}
 		});
 	}
 
 	@Override
-	public void onAudioPlayerStop(AudioStreamPlayer player)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerStop(AudioStreamPlayer player) {
+		runOnUiThread(new Runnable() {
 
 			@Override
-			public void run()
-			{
+			public void run() {
 				updatePlayer(State.Stopped);
 			}
 		});
@@ -249,14 +210,11 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	}
 
 	@Override
-	public void onAudioPlayerError(AudioStreamPlayer player)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerError(AudioStreamPlayer player) {
+		runOnUiThread(new Runnable() {
 
 			@Override
-			public void run()
-			{
+			public void run() {
 				updatePlayer(State.Stopped);
 			}
 		});
@@ -264,14 +222,11 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	}
 
 	@Override
-	public void onAudioPlayerBuffering(AudioStreamPlayer player)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerBuffering(AudioStreamPlayer player) {
+		runOnUiThread(new Runnable() {
 
 			@Override
-			public void run()
-			{
+			public void run() {
 				updatePlayer(State.Buffering);
 			}
 		});
@@ -279,15 +234,11 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	}
 
 	@Override
-	public void onAudioPlayerDuration(final int totalSec)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerDuration(final int totalSec) {
+		runOnUiThread(new Runnable() {
 			@Override
-			public void run()
-			{
-				if (totalSec > 0)
-				{
+			public void run() {
+				if (totalSec > 0) {
 					int min = totalSec / 60;
 					int sec = totalSec % 60;
 
@@ -301,15 +252,11 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	}
 
 	@Override
-	public void onAudioPlayerCurrentTime(final int sec)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerCurrentTime(final int sec) {
+		runOnUiThread(new Runnable() {
 			@Override
-			public void run()
-			{
-				if (!isSeekBarTouch)
-				{
+			public void run() {
+				if (!isSeekBarTouch) {
 					int m = sec / 60;
 					int s = sec % 60;
 
@@ -322,13 +269,10 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	}
 
 	@Override
-	public void onAudioPlayerPause(AudioStreamPlayer player)
-	{
-		runOnUiThread(new Runnable()
-		{
+	public void onAudioPlayerPause(AudioStreamPlayer player) {
+		runOnUiThread(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				mPlayButton.setText("Play");
 			}
 		});
@@ -337,85 +281,63 @@ public class PlayerActivity extends Activity implements OnAudioStreamInterface, 
 	private boolean isSeekBarTouch = false;
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-	{
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 	}
 
 	@Override
-	public void onStartTrackingTouch(SeekBar seekBar)
-	{
+	public void onStartTrackingTouch(SeekBar seekBar) {
 		this.isSeekBarTouch = true;
 	}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar)
-	{
+	public void onStopTrackingTouch(SeekBar seekBar) {
 		this.isSeekBarTouch = false;
 
 		int progress = seekBar.getProgress();
 
 		this.mAudioPlayer.seekTo(progress);
 	}
-	
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-		case R.id.button_play:
-		{
-			if (mPlayButton.isSelected())
-			{
-				if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause)
-				{
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button_play: {
+			if (mPlayButton.isSelected()) {
+				if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause) {
+
 					mAudioPlayer.pauseToPlay();
-					started = true;
-					
-				}
-				else
-				{
-					started = false;
+
+				} else {
+
 					pause();
-					
-					
+
 				}
-			}
-			else
-			{
-				started = true;
+			} else {
+
 				play();
 				
+
 			}
 			break;
 		}
-		case R.id.button_stop:
-		{
+		case R.id.button_stop: {
 			stop();
 			break;
 		}
 		}
 	}
 
-		
-	public void onProgressUpdate(double[] toTransform) {
-	    canvas.drawColor(Color.BLACK);
-	   
-	    for(int i = 0; i < toTransform.length; i++){
-	    int x = i;
-	    int downy = (int) (100 - (toTransform[i] * 10));
-	    int upy = 100;
-	   
-	    canvas.drawLine(x, downy, x, upy, paint);
-	    }
-	    imageView.invalidate();
-	    
-	    
-	    }
-	
-	
-	
+	public void onProgressUpdate(double[]... toTransform) {
+		canvas.drawColor(Color.BLACK);
 
+		for (int i = 0; i < toTransform[0].length; i++) {
+			int x = i;
+			int downy = (int) (100 - (toTransform[0][i] * 10));
+			int upy = 100;
 
+			canvas.drawLine(x, downy, x, upy, paint);
+		}
+		imageView.invalidate();
+
+	}
 
 }
-	
-	
