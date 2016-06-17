@@ -29,10 +29,8 @@ public class MainActivity extends Activity {
     
     // Program variables
     private byte AttinyOut;
-    private boolean ledStat;
     private boolean connectStat = false;
     private Button connect_button;
-    private TextView xAccel;
     protected static final int MOVE_TIME = 80;
     private long lastWrite = 0;
     private View aboutView;
@@ -83,8 +81,8 @@ public class MainActivity extends Activity {
                      connect_button.setText(R.string.connected);
                      
          	 		// Reset the BluCar
-         	 		AttinyOut = 0;
-         	 		ledStat = false;
+         	 		//AttinyOut = 0;
+         	 		//ledStat = false;
          	 		write(AttinyOut);
                  }else {
                  	// Connection failed

@@ -24,7 +24,7 @@ public class FileExplorer extends Activity {
          @Override
          public void onChanged(String path) {
             // TODO Auto-generated method stub
-            ((TextView) findViewById(R.id.FilePath)).setText("°æ·Î: "+path);
+            ((TextView) findViewById(R.id.FilePath)).setText("ê²½ë¡œ : "+path);
          }
       });
         
@@ -32,7 +32,7 @@ public class FileExplorer extends Activity {
          @Override
          public void onSelected(String path, String fileName) {
             // TODO Auto-generated method stub
-            ((TextView) findViewById(R.id.FilePath)).setText("°æ·Î: "+path);
+            ((TextView) findViewById(R.id.FilePath)).setText("ê²½ë¡œ : "+path);
             Intent intent = new Intent(getApplicationContext(), Play.class);
             intent.putExtra("path", path);
             intent.putExtra("fileName", fileName);

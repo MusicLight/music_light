@@ -1,246 +1,61 @@
 package kr.co.company.musiclight;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Play extends Activity implements OnClickListener {
+public class Play extends Activity{
 	MediaPlayer mp = null;
 	TextView v;
 	String s, s1;
-	Button start, pause, on;
-	int frequency = 8000;
-	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
-	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-	// ¿ì¸®ÀÇ FFT °´Ã¼´Â transformer°í, ÀÌ FFT °´Ã¼¸¦ ÅëÇØ AudioRecord °´Ã¼¿¡¼­ ÇÑ ¹ø¿¡ 256°¡Áö »ùÇÃÀ»
-	// ´Ù·é´Ù. »ç¿ëÇÏ´Â »ùÇÃÀÇ ¼ö´Â FFT °´Ã¼¸¦ ÅëÇØ
-	// »ùÇÃµéÀ» ½ÇÇàÇÏ°í °¡Á®¿Ã ÁÖÆÄ¼öÀÇ ¼ö¿Í ÀÏÄ¡ÇÑ´Ù. ´Ù¸¥ Å©±â¸¦ ¸¶À½´ë·Î ÁöÁ¤ÇØµµ µÇÁö¸¸, ¸Ş¸ğ¸®¿Í ¼º´É Ãø¸éÀ» ¹İµå½Ã °í·ÁÇØ¾ß
-	// ÇÑ´Ù.
-	// Àû¿ëµÉ ¼öÇĞÀû °è»êÀÌ ÇÁ·Î¼¼¼­ÀÇ ¼º´É°ú ¹ĞÁ¢ÇÑ °ü°è¸¦ º¸ÀÌ±â ¶§¹®ÀÌ´Ù.
-	private RealDoubleFFT transformer;
-	int blockSize = 256;
-	boolean started = false;
-
-	// RecordAudio´Â ¿©±â¿¡¼­ Á¤ÀÇµÇ´Â ³»ºÎ Å¬·¡½º·Î¼­ AsyncTask¸¦ È®ÀåÇÑ´Ù.
-	RecordAudio recordTask;
-
-	// Bitmap ÀÌ¹ÌÁö¸¦ Ç¥½ÃÇÏ±â À§ÇØ ImageView¸¦ »ç¿ëÇÑ´Ù. ÀÌ ÀÌ¹ÌÁö´Â ÇöÀç ¿Àµğ¿À ½ºÆ®¸²¿¡¼­ ÁÖÆÄ¼öµéÀÇ ·¹º§À» ³ªÅ¸³½´Ù.
-	// ÀÌ ·¹º§µéÀ» ±×¸®·Á¸é Bitmap¿¡¼­ ±¸¼ºÇÑ Canvas °´Ã¼¿Í Paint°´Ã¼°¡ ÇÊ¿äÇÏ´Ù.
-	ImageView imageView;
-	Bitmap bitmap;
-	Canvas canvas;
-	Paint paint;
-
+	Button start, pause;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
-
+		
 		Intent intent = getIntent();
 		String path = intent.getExtras().getString("path");
 		String fileName = intent.getExtras().getString("fileName");
 		String title = intent.getExtras().getString("title");
-
+		
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
-		on = (Button) findViewById(R.id.light_on);
-
-		s = path + fileName;
-
-		((TextView) findViewById(R.id.mypath)).setText("°æ·Î: " + path);
-		((TextView) findViewById(R.id.title)).setText("ÆÄÀÏ¸í: " + fileName);
-
-		start.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
+		
+		s= path+fileName;
+		
+		
+		((TextView) findViewById(R.id.mypath)).setText("ê²½ë¡œ : "+ path);	
+		((TextView) findViewById(R.id.title)).setText("íŒŒì¼ëª… : "+fileName);
+		
+		start.setOnClickListener(new Button.OnClickListener(){
+			public void onClick(View v){
 				mp = new MediaPlayer();
-				try {
-					mp.setDataSource(s);
-					mp.prepare();
-				} catch (Exception e) {
+				try{
+				mp.setDataSource(s);
+				mp.prepare();
+				}
+				catch(Exception e){
 					e.printStackTrace();
 				}
 				mp.start();
 			}
 		});
-
-		pause.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				if (mp != null) {
+			
+		
+		pause.setOnClickListener(new Button.OnClickListener(){
+			public void onClick(View v){
+				if(mp != null){
 					mp.stop();
 					mp.release();
 				}
-				mp = null;
+				mp=null;
 			}
 		});
-
-		start.setOnClickListener(this);
-
-		// RealDoubleFFT Å¬·¡½º ÄÁ½ºÆ®·°ÅÍ´Â ÇÑ¹ø¿¡ Ã³¸®ÇÒ »ùÇÃµéÀÇ ¼ö¸¦ ¹Ş´Â´Ù. ±×¸®°í Ãâ·ÂµÉ ÁÖÆÄ¼ö ¹üÀ§µéÀÇ ¼ö¸¦
-		// ³ªÅ¸³½´Ù.
-		transformer = new RealDoubleFFT(blockSize);
-
-		// ImageView ¹× °ü·Ã °´Ã¼ ¼³Á¤ ºÎºĞ
-		imageView = (ImageView) findViewById(R.id.ImageView01);
-		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
-		canvas = new Canvas(bitmap);
-		paint = new Paint();
-		paint.setColor(Color.GREEN);
-		imageView.setImageBitmap(bitmap);
-	}
-
-	public static byte[] decode(String path, int startMs, int maxMs) throws FileNotFoundException  {
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream(1024);
-
-		float totalMs = 0;
-		boolean seeking = true;
-
-		File file = new File(path);
-		InputStream inputStream = new BufferedInputStream(new FileInputStream(file), 8 * 1024);
-		try {
-			Bitstream bitstream = new Bitstream(inputStream);
-			Decoder decoder = new Decoder();
-
-			boolean done = false;
-			while (!done) {
-				/////////////////////////////////////////
-				kr.co.company.musiclight.Header frameHeader = bitstream.readFrame();
-				if (frameHeader == null) {
-					done = true;
-				} else {
-					totalMs += frameHeader.ms_per_frame();
-
-					if (totalMs >= startMs) {
-						seeking = false;
-					}
-
-					if (!seeking) {
-						SampleBuffer output = (SampleBuffer) decoder.decodeFrame(frameHeader, bitstream);
-
-						if (output.getSampleFrequency() != 44100 || output.getChannelCount() != 2) {
-
-						}
-
-						short[] pcm = output.getBuffer();
-						for (short s : pcm) {
-							outStream.write(s & 0xff);
-							outStream.write((s >> 8) & 0xff);
-						}
-					}
-
-					if (totalMs >= (startMs + maxMs)) {
-						done = true;
-					}
-				}
-				bitstream.closeFrame();
-			}
-
-			return outStream.toByteArray();
-		} catch (BitstreamException e) {
-			
-		} catch (DecoderException e) {
-
-		} finally {
-			IOUtils.safeClose(inputStream);
 		}
-		return null;
-	}
-
-	private class RecordAudio extends AsyncTask<Void, double[], Void> {
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				// AudioRecord¸¦ ¼³Á¤ÇÏ°í »ç¿ëÇÑ´Ù.
-				int bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
-
-				AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency,
-						channelConfiguration, audioEncoding, bufferSize);
-
-				// short·Î ÀÌ·ïÁø ¹è¿­ÀÎ buffer´Â ¿ø½Ã PCM »ùÇÃÀ» AudioRecord °´Ã¼¿¡¼­ ¹Ş´Â´Ù.
-				// double·Î ÀÌ·ïÁø ¹è¿­ÀÎ toTransformÀº °°Àº µ¥ÀÌÅÍ¸¦ ´ãÁö¸¸ double Å¸ÀÔÀÎµ¥, FFT
-				// Å¬·¡½º¿¡¼­´Â doubleÅ¸ÀÔÀÌ ÇÊ¿äÇØ¼­ÀÌ´Ù.
-				short[] buffer = new short[blockSize];
-				double[] toTransform = new double[blockSize];
-
-				audioRecord.startRecording();
-
-				while (started) {
-					int bufferReadResult = audioRecord.read(buffer, 0, blockSize);
-
-					// AudioRecord °´Ã¼¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞÀº ´ÙÀ½¿¡´Â short Å¸ÀÔÀÇ º¯¼öµéÀ» double Å¸ÀÔÀ¸·Î
-					// ¹Ù²Ù´Â ·çÇÁ¸¦ Ã³¸®ÇÑ´Ù.
-					// Á÷Á¢ Å¸ÀÔ º¯È¯(casting)À¸·Î ÀÌ ÀÛ¾÷À» Ã³¸®ÇÒ ¼ö ¾ø´Ù. °ªµéÀÌ ÀüÃ¼ ¹üÀ§°¡ ¾Æ´Ï¶ó -1.0¿¡¼­
-					// 1.0 »çÀÌ¶ó¼­ ±×·¸´Ù
-					// short¸¦ 32,768.0(Short.MAX_VALUE) À¸·Î ³ª´©¸é double·Î Å¸ÀÔÀÌ ¹Ù²î´Âµ¥,
-					// ÀÌ °ªÀÌ shortÀÇ ÃÖ´ë°ªÀÌ±â ¶§¹®ÀÌ´Ù.
-					for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
-						toTransform[i] = (double) buffer[i] / Short.MAX_VALUE; // ºÎÈ£
-																				// ÀÖ´Â
-																				// 16ºñÆ®
-					}
-					transformer.ft(toTransform);
-					// publishProgress¸¦ È£ÃâÇÏ¸é onProgressUpdate°¡ È£ÃâµÈ´Ù.
-					publishProgress(toTransform);
-				}
-
-				audioRecord.stop();
-			} catch (Throwable t) {
-				Log.e("AudioRecord", "Recording Failed");
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onProgressUpdate(double[]... toTransform) {
-			canvas.drawColor(Color.BLACK);
-
-			for (int i = 0; i < toTransform[0].length; i++) {
-				int x = i;
-				int downy = (int) (100 - (toTransform[0][i] * 10));
-				int upy = 100;
-
-				canvas.drawLine(x, downy, x, upy, paint);
-			}
-			imageView.invalidate();
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		if (started) {
-			started = false;
-			start.setText("Start");
-			recordTask.cancel(true);
-		} else {
-			started = true;
-			start.setText("Stop");
-			recordTask = new RecordAudio();
-			recordTask.execute();
-			// TODO Auto-generated method stub
-
-		}
-	}
-
 }
