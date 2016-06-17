@@ -9,7 +9,7 @@ int relay2 = 3;
 int relay3 = 4;
 int relay4 = 5;
 
-byte arr[4] = {1,2,3,4};
+byte arr[3];
 
 
 void setup() {
@@ -30,8 +30,8 @@ void loop() {
 
   if (BTSerial.available()) { // 블루투스로 데이터 수신
     //byte data = BTSerial.read(); // 수신 받은 데이터 저장
-    BTSerial.write(arr[4]);
-    Serial.write(arr[4]); // 수신된 데이터 시리얼 모니터로 출력
+    BTSerial.write(arr[3]);
+    Serial.write(arr[3]); // 수신된 데이터 시리얼 모니터로 출력
     //buffer[bufferPosition++] = data; // 수신 받은 데이터를 버퍼에 저장
     bufferPosition = 0;
 
@@ -51,24 +51,25 @@ void loop() {
       }
       }*/
 
+
     switch (arr[0])
     {
-      case 0 :
+      case 0 ... 10 :
         digitalWrite(relay1, HIGH);
         break;
 
-      case 1:
+      case 11 ... 20:
         digitalWrite(relay2, HIGH);
         break;
     }
 
     switch (arr[1])
     {
-      case 0:
+      case 0 ... 10:
         digitalWrite(relay3, HIGH);
         break;
 
-      case 1:
+      case 11 ... 20:
         digitalWrite(relay4, HIGH);
         break;
     }

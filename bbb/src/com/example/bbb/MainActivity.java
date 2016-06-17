@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// Send a message using content of the edit text widget
 				
-				byte[] arr = { 1, 2, 3, 4 };
+				byte[] arr = { 5, 19, 26};
 				write(arr);
 			}
 		});
