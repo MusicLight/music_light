@@ -24,10 +24,7 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed
   * @param  n  the size of a real data sequence. When <em>n</em> is a multiplication of small
   * numbers (4, 2, 3, 5), this FFT transform is very efficient.
 */
-     
-
-
-     public  RealDoubleFFT(int n)
+     public RealDoubleFFT(int n)
      {
           ndim = n;
           norm_factor = n;
@@ -159,5 +156,4 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed
          }
          rfftb(ndim, y, wavetable);
      }
-
 }
