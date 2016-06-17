@@ -27,11 +27,15 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+<<<<<<< HEAD
 import android.widget.Toast;
+=======
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 
 public class PlayerActivity extends Activity
 		implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener {
 
+<<<<<<< HEAD
 	/****************** 블루투스 ******************************/
 	// Intent request codes
 	private static final int REQUEST_CONNECT_DEVICE = 1;
@@ -65,6 +69,8 @@ public class PlayerActivity extends Activity
 	private StringBuffer mOutStringBuffer;
 
 	/*************************************************************************/
+=======
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 	private Button mPlayButton = null;
 	private Button mStopButton = null;
 
@@ -79,7 +85,11 @@ public class PlayerActivity extends Activity
 	int frequency = 8000;
 	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+<<<<<<< HEAD
 	int blockSize = 256;
+=======
+	static int blockSize = 256;
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 	private RealDoubleFFT transformer;
 	ImageView imageView;
 	Bitmap bitmap;
@@ -87,7 +97,10 @@ public class PlayerActivity extends Activity
 	Paint paint;
 	boolean started = false;
 	byte[] aaa;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 	double[] toTransform = new double[blockSize];
 
 	@Override
@@ -119,6 +132,7 @@ public class PlayerActivity extends Activity
 		paint.setColor(Color.GREEN);
 		imageView.setImageBitmap(bitmap);
 
+<<<<<<< HEAD
 		transformer = new RealDoubleFFT(blockSize);
 
 		/*********************************************************/
@@ -195,6 +209,8 @@ public class PlayerActivity extends Activity
 			}
 		});
 		/**********************************************************************/
+=======
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 	}
 
 
@@ -263,7 +279,11 @@ public class PlayerActivity extends Activity
 		}
 	}
 
+<<<<<<< HEAD
 	private void play() {
+=======
+	private void play()  {
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 		releaseAudioPlayer();
 
 		mAudioPlayer = new AudioStreamPlayer();
@@ -272,6 +292,7 @@ public class PlayerActivity extends Activity
 		mAudioPlayer.setUrlString("/storage/emulated/0/Music/aaa.mp3");
 
 		try {
+<<<<<<< HEAD
 
 			mAudioPlayer.play();
 			while (started) {
@@ -286,8 +307,25 @@ public class PlayerActivity extends Activity
 			}
 
 		} catch (IOException e) {
+=======
+			mAudioPlayer.play();
+			aaa = mAudioPlayer.fftarr;
+
+			for (int i = 0; i < blockSize; i++) {
+				toTransform[i] = (double) aaa[i] / Byte.MAX_VALUE;
+			}
+			
+			transformer.ft(toTransform);
+			// onProgressUpdate(toTransform);
+		} 
+		
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 			e.printStackTrace();
 		}
+		
+
 	}
 
 	private void releaseAudioPlayer() {
@@ -422,17 +460,31 @@ public class PlayerActivity extends Activity
 		case R.id.button_play: {
 			if (mPlayButton.isSelected()) {
 				if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause) {
+<<<<<<< HEAD
 					mAudioPlayer.pauseToPlay();
 					started = true;
 
 				} else {
 					started = false;
+=======
+
+					mAudioPlayer.pauseToPlay();
+
+				} else {
+
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 					pause();
 
 				}
 			} else {
+<<<<<<< HEAD
 				started = true;
 				play();
+=======
+
+				play();
+				
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 
 			}
 			break;
@@ -444,6 +496,7 @@ public class PlayerActivity extends Activity
 		}
 	}
 
+<<<<<<< HEAD
 	public void onProgressUpdate(double[] toTransform) {
 		canvas.drawColor(Color.BLACK);
 
@@ -609,5 +662,20 @@ public class PlayerActivity extends Activity
 	 * (item.getItemId()) { case R.id.about: // Show info about the author
 	 * (that's me!) aboutAlert.show(); return true; } return false; }
 	 */
+=======
+	public void onProgressUpdate(double[]... toTransform) {
+		canvas.drawColor(Color.BLACK);
+
+		for (int i = 0; i < toTransform[0].length; i++) {
+			int x = i;
+			int downy = (int) (100 - (toTransform[0][i] * 10));
+			int upy = 100;
+
+			canvas.drawLine(x, downy, x, upy, paint);
+		}
+		imageView.invalidate();
+
+	}
+>>>>>>> 6bfab90b42b695f1b5f3eafb68be777143053c1b
 
 }
