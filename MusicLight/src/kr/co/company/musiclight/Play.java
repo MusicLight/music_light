@@ -1,6 +1,12 @@
 package kr.co.company.musiclight;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.UUID;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,12 +18,15 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import kr.co.company.musiclight.MainActivity.ConnectThread;
 
 public class Play extends Activity implements OnClickListener {
 	MediaPlayer mp = null;
@@ -36,6 +45,8 @@ public class Play extends Activity implements OnClickListener {
 	int blockSize = 256;
 	Button startStopButton;
 	boolean started = false;
+	byte arr[] = new byte[blockSize];
+	
 
 	// RecordAudio는 여기에서 정의되는 내부 클래스로서 AsyncTask를 확장한다.
 	RecordAudio recordTask;
@@ -46,6 +57,40 @@ public class Play extends Activity implements OnClickListener {
 	Bitmap bitmap;
 	Canvas canvas;
 	Paint paint;
+	
+	/****************** 블루투스 ******************************/
+	// Intent request codes
+	private static final int REQUEST_CONNECT_DEVICE = 1;
+	private static final int REQUEST_ENABLE_BT = 2;
+
+	// Program variables
+	private byte AttinyOut;
+	private boolean ledStat;
+	private boolean connectStat = false;
+	private Button connect_button;
+	private Button button_send;
+	protected static final int MOVE_TIME = 80;
+	private long lastWrite = 0;
+	private View aboutView;
+	private View controlView;
+	OnClickListener myClickListener;
+	ProgressDialog myProgressDialog;
+	private Toast failToast;
+	private Handler mHandler;
+
+	// Bluetooth Stuff
+	private BluetoothAdapter mBluetoothAdapter = null;
+	private BluetoothSocket btSocket = null;
+	private OutputStream outStream = null;
+	private ConnectThread mConnectThread = null;
+	private String deviceAddress = null;
+	// Well known SPP UUID (will *probably* map to RFCOMM channel 1 (default) if
+	// not in use);
+	private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+	private StringBuffer mOutStringBuffer;
+
+	/*************************************************************************/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +201,10 @@ public class Play extends Activity implements OnClickListener {
 					transformer.ft(toTransform);
 					// publishProgress를 호출하면 onProgressUpdate가 호출된다.
 					publishProgress(toTransform);
+					for(int i =0;i<blockSize;i++){
+						arr[i]=(byte)toTransform[i];
+					}
+					write(arr);
 				}
 
 				audioRecord.stop();
@@ -188,6 +237,39 @@ public class Play extends Activity implements OnClickListener {
 		}
 	}
 
+	public void write(byte[] arr) {
+		if (outStream != null) {
+			try {
+				outStream.write(arr);
+			} catch (IOException e) {
+			}
+		}
+	}
+
+	public void emptyOutStream() {
+		if (outStream != null) {
+			try {
+				outStream.flush();
+			} catch (IOException e) {
+			}
+		}
+	}
+	public void connect() {
+		// Launch the DeviceListActivity to see devices and do scan
+		Intent serverIntent = new Intent(this, DeviceListActivity.class);
+		startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+	}
+
+	public void disconnect() {
+		if (outStream != null) {
+			try {
+				outStream.close();
+				connectStat = false;
+				connect_button.setText(R.string.disconnected);
+			} catch (IOException e) {
+			}
+		}
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
