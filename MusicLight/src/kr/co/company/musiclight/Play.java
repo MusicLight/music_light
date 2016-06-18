@@ -60,8 +60,6 @@ public class Play extends Activity implements OnClickListener {
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
 		
-		startStopButton = (Button) findViewById(R.id.StartStopButton);
-		startStopButton.setOnClickListener(this);
 
 		s = path + fileName;
 
@@ -80,6 +78,15 @@ public class Play extends Activity implements OnClickListener {
 
 		start.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
+				if (started) {
+					started = false;
+					recordTask.cancel(true);
+				} else {
+					started = true;
+					recordTask = new RecordAudio();
+					recordTask.execute();
+				}
+				
 				mp = new MediaPlayer();
 				try {
 					mp.setDataSource(s);
@@ -182,16 +189,8 @@ public class Play extends Activity implements OnClickListener {
 	}
 
 	@Override
-	public void onClick(View arg0) {
-		if (started) {
-			started = false;
-			startStopButton.setText("Start");
-			recordTask.cancel(true);
-		} else {
-			started = true;
-			startStopButton.setText("Stop");
-			recordTask = new RecordAudio();
-			recordTask.execute();
-		}
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
 	}
 }
