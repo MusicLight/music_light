@@ -254,24 +254,24 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-
-	public void write(byte[] arr) {
-		if (outStream != null) {
-			try {
-				outStream.write(arr);
-			} catch (IOException e) {
-			}
-		}
-	}
-
-	public void emptyOutStream() {
-		if (outStream != null) {
-			try {
-				outStream.flush();
-			} catch (IOException e) {
-			}
-		}
-	}
+	
+    public void write(byte[] arr) {
+   	 if (outStream != null) {
+            try {
+           	 outStream.write(arr);
+            } catch (IOException e) {
+            }
+        }
+    }
+    
+    public void emptyOutStream() {
+   	 if (outStream != null) {
+            try {
+           	 outStream.flush();
+            } catch (IOException e) {
+            }
+        }
+    }
 
 	public void connect() {
 		// Launch the DeviceListActivity to see devices and do scan
