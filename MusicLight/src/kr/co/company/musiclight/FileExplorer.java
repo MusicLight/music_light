@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("SdCardPath")
 public class FileExplorer extends Activity {
@@ -54,11 +52,4 @@ public class FileExplorer extends Activity {
 		Intent intent = new Intent(getApplicationContext(), Play.class);
 		startActivity(intent);
 	}
-
-	public void _finish() {
-		moveTaskToBack(true);
-		finish();
-		android.os.Process.killProcess(android.os.Process.myPid());
-	}
-
 }

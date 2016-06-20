@@ -96,8 +96,7 @@ public class Play extends Activity implements OnClickListener {
 		Intent intent = getIntent();
 		String path = intent.getExtras().getString("path");
 		String fileName = intent.getExtras().getString("fileName");
-		String title = intent.getExtras().getString("title");
-
+		
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
 
@@ -328,7 +327,6 @@ public class Play extends Activity implements OnClickListener {
 				short[] buffer = new short[blockSize];
 				double[] toTransform = new double[blockSize];
 				int[] arr = new int[blockSize];
-				double ad, bd, cd;
 				int a;
 				byte b, cc, dd, ee;
 				byte[] abc = new byte[blockSize];
@@ -378,17 +376,6 @@ public class Play extends Activity implements OnClickListener {
 					write(cc);
 					write(dd);
 					write(ee);
-					// a=(byte)arr
-					// b=(byte)arr[60];
-					// c=(byte)arr[180];
-
-					// write(a);
-					// write(b);
-					// write(c);
-
-					// arr = toByteArray(toTransform);
-					// byte arr[] = {5};
-					// write(arr);
 				}
 
 				audioRecord.stop();
