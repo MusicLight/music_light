@@ -134,10 +134,6 @@ public class Play extends Activity implements OnClickListener {
 					connectStat = true;
 					connect_button.setText(R.string.connected);
 
-					// Reset the BluCar
-					/*
-					 * AttinyOut = 0; ledStat = false; write(AttinyOut);
-					 */
 				} else {
 					// Connection failed
 					failToast.show();
