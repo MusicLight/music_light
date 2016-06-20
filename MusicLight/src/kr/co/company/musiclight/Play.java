@@ -3,9 +3,11 @@ package kr.co.company.musiclight;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,13 +29,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import kr.co.company.musiclight.MainActivity.ConnectThread;
 
 public class Play extends Activity implements OnClickListener {
 	MediaPlayer mp = null;
 	TextView v;
 	String s, s1;
-	Button start, pause;
+	Button start, pause, light;
 	int frequency = 8000;
 	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
 	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
@@ -45,34 +47,29 @@ public class Play extends Activity implements OnClickListener {
 	int blockSize = 256;
 	Button startStopButton;
 	boolean started = false;
-	byte arr[] = new byte[blockSize];
-	
-
+	byte[] arr = new byte[blockSize];
+	double[] toTransform = new double[blockSize];
+	byte[] abc = new byte[blockSize];
+	byte a, b, c;
 	// RecordAudio는 여기에서 정의되는 내부 클래스로서 AsyncTask를 확장한다.
 	RecordAudio recordTask;
-
+	double ad, bd, cd;
 	// Bitmap 이미지를 표시하기 위해 ImageView를 사용한다. 이 이미지는 현재 오디오 스트림에서 주파수들의 레벨을 나타낸다.
 	// 이 레벨들을 그리려면 Bitmap에서 구성한 Canvas 객체와 Paint객체가 필요하다.
 	ImageView imageView;
 	Bitmap bitmap;
 	Canvas canvas;
 	Paint paint;
-	
-	/****************** 블루투스 ******************************/
+
+	/****************************** 8** 블루투스 ******************************/
 	// Intent request codes
 	private static final int REQUEST_CONNECT_DEVICE = 1;
 	private static final int REQUEST_ENABLE_BT = 2;
 
 	// Program variables
-	private byte AttinyOut;
-	private boolean ledStat;
 	private boolean connectStat = false;
 	private Button connect_button;
-	private Button button_send;
 	protected static final int MOVE_TIME = 80;
-	private long lastWrite = 0;
-	private View aboutView;
-	private View controlView;
 	OnClickListener myClickListener;
 	ProgressDialog myProgressDialog;
 	private Toast failToast;
@@ -88,7 +85,6 @@ public class Play extends Activity implements OnClickListener {
 	// not in use);
 	private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-	private StringBuffer mOutStringBuffer;
 
 	/*************************************************************************/
 
@@ -104,7 +100,6 @@ public class Play extends Activity implements OnClickListener {
 
 		start = (Button) findViewById(R.id.start);
 		pause = (Button) findViewById(R.id.pause);
-		
 
 		s = path + fileName;
 
@@ -121,6 +116,50 @@ public class Play extends Activity implements OnClickListener {
 		paint.setColor(Color.GREEN);
 		imageView.setImageBitmap(bitmap);
 
+		// Finds buttons in .xml layout file
+		connect_button = (Button) findViewById(R.id.connect_button);
+
+		myProgressDialog = new ProgressDialog(this);
+		failToast = Toast.makeText(this, R.string.failedToConnect, Toast.LENGTH_SHORT);
+
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (myProgressDialog.isShowing()) {
+					myProgressDialog.dismiss();
+				}
+
+				// Check if bluetooth connection was made to selected device
+				if (msg.what == 1) {
+					// Set button to display current status
+					connectStat = true;
+					connect_button.setText(R.string.connected);
+
+					// Reset the BluCar
+					/*
+					 * AttinyOut = 0; ledStat = false; write(AttinyOut);
+					 */
+				} else {
+					// Connection failed
+					failToast.show();
+				}
+			}
+		};
+
+		// Check whether bluetooth adapter exists
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+			Toast.makeText(this, R.string.no_bt_device, Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
+
+		// If BT is not on, request that it be enabled.
+		if (!mBluetoothAdapter.isEnabled()) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		}
+
 		start.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				if (started) {
@@ -131,7 +170,7 @@ public class Play extends Activity implements OnClickListener {
 					recordTask = new RecordAudio();
 					recordTask.execute();
 				}
-				
+
 				mp = new MediaPlayer();
 				try {
 					mp.setDataSource(s);
@@ -152,7 +191,125 @@ public class Play extends Activity implements OnClickListener {
 				mp = null;
 			}
 		});
-	
+
+		connect_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (connectStat) {
+					// Attempt to disconnect from the device
+					disconnect();
+				} else {
+					// Attempt to connect to the device
+					connect();
+				}
+			}
+		});
+
+	}
+
+	/** Thread used to connect to a specified Bluetooth Device */
+	public class ConnectThread extends Thread {
+		private String address;
+		private boolean connectionStatus;
+
+		ConnectThread(String MACaddress) {
+			address = MACaddress;
+			connectionStatus = true;
+		}
+
+		public void run() {
+			// When this returns, it will 'know' about the server,
+			// via it's MAC address.
+			try {
+				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
+				// We need two things before we can successfully connect
+				// (authentication issues aside): a MAC address, which we
+				// already have, and an RFCOMM channel.
+				// Because RFCOMM channels (aka ports) are limited in
+				// number, Android doesn't allow you to use them directly;
+				// instead you request a RFCOMM mapping based on a service
+				// ID. In our case, we will use the well-known SPP Service
+				// ID. This ID is in UUID (GUID to you Microsofties)
+				// format. Given the UUID, Android will handle the
+				// mapping for you. Generally, this will return RFCOMM 1,
+				// but not always; it depends what other BlueTooth services
+				// are in use on your Android device.
+				try {
+					btSocket = device.createRfcommSocketToServiceRecord(SPP_UUID);
+				} catch (IOException e) {
+					connectionStatus = false;
+				}
+			} catch (IllegalArgumentException e) {
+				connectionStatus = false;
+			}
+
+			// Discovery may be going on, e.g., if you're running a
+			// 'scan for devices' search from your handset's Bluetooth
+			// settings, so we call cancelDiscovery(). It doesn't hurt
+			// to call it, but it might hurt not to... discovery is a
+			// heavyweight process; you don't want it in progress when
+			// a connection attempt is made.
+			mBluetoothAdapter.cancelDiscovery();
+
+			// Blocking connect, for a simple client nothing else can
+			// happen until a successful connection is made, so we
+			// don't care if it blocks.
+			try {
+				btSocket.connect();
+			} catch (IOException e1) {
+				try {
+					btSocket.close();
+				} catch (IOException e2) {
+				}
+			}
+
+			// Create a data stream so we can talk to server.
+			try {
+				outStream = btSocket.getOutputStream();
+			} catch (IOException e2) {
+				connectionStatus = false;
+			}
+
+			// Send final result
+			if (connectionStatus) {
+				mHandler.sendEmptyMessage(1);
+			} else {
+				mHandler.sendEmptyMessage(0);
+			}
+		}
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case REQUEST_CONNECT_DEVICE:
+			// When DeviceListActivity returns with a device to connect
+			if (resultCode == Activity.RESULT_OK) {
+				// Show please wait dialog
+				myProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.pleaseWait),
+						getResources().getString(R.string.makingConnectionString), true);
+
+				// Get the device MAC address
+				deviceAddress = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+				// Connect to device with specified MAC address
+				mConnectThread = new ConnectThread(deviceAddress);
+				mConnectThread.start();
+
+			} else {
+				// Failure retrieving MAC address
+				Toast.makeText(this, R.string.macFailed, Toast.LENGTH_SHORT).show();
+			}
+			break;
+		case REQUEST_ENABLE_BT:
+			// When the request to enable Bluetooth returns
+			if (resultCode == Activity.RESULT_OK) {
+				// Bluetooth is now enabled
+			} else {
+				// User did not enable Bluetooth or an error occured
+				Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		}
 	}
 
 	private class RecordAudio extends AsyncTask<Void, double[], Void> {
@@ -170,6 +327,11 @@ public class Play extends Activity implements OnClickListener {
 				// 클래스에서는 double타입이 필요해서이다.
 				short[] buffer = new short[blockSize];
 				double[] toTransform = new double[blockSize];
+				int[] arr = new int[blockSize];
+				double ad, bd, cd;
+				int a;
+				byte b, cc, dd, ee;
+				byte[] abc = new byte[blockSize];
 
 				audioRecord.startRecording();
 
@@ -184,8 +346,8 @@ public class Play extends Activity implements OnClickListener {
 					// 이 값이 short의 최대값이기 때문이다.
 					for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
 						toTransform[i] = (double) buffer[i] / Short.MAX_VALUE; // 부호
-																				// 있는
-																				// 16비트
+						// 있는
+						// 16비트
 					}
 
 					// 이제 double값들의 배열을 FFT 객체로 넘겨준다. FFT 객체는 이 배열을 재사용하여 출력 값을
@@ -199,12 +361,34 @@ public class Play extends Activity implements OnClickListener {
 					// 따라서 배열의 첫 번째 요소로 나타난 데이터는 영(0)과 15.625Hz 사이에
 					// 해당하는 오디오 레벨을 의미한다.
 					transformer.ft(toTransform);
+
 					// publishProgress를 호출하면 onProgressUpdate가 호출된다.
 					publishProgress(toTransform);
-					for(int i =0;i<blockSize;i++){
-						arr[i]=(byte)toTransform[i];
+					arr = toIntArray(toTransform);
+
+					for (int i = 0; i < arr.length; i++) {
+						a = arr[i];
+						b = (byte) a;
+						abc[i] = b;
 					}
-					write(arr);
+					cc = abc[10];
+					dd = abc[20];
+					ee = abc[30];
+
+					write(cc);
+					write(dd);
+					write(ee);
+					// a=(byte)arr
+					// b=(byte)arr[60];
+					// c=(byte)arr[180];
+
+					// write(a);
+					// write(b);
+					// write(c);
+
+					// arr = toByteArray(toTransform);
+					// byte arr[] = {5};
+					// write(arr);
 				}
 
 				audioRecord.stop();
@@ -237,10 +421,10 @@ public class Play extends Activity implements OnClickListener {
 		}
 	}
 
-	public void write(byte[] arr) {
+	public void write(byte cc) {
 		if (outStream != null) {
 			try {
-				outStream.write(arr);
+				outStream.write(cc);
 			} catch (IOException e) {
 			}
 		}
@@ -254,6 +438,7 @@ public class Play extends Activity implements OnClickListener {
 			}
 		}
 	}
+
 	public void connect() {
 		// Launch the DeviceListActivity to see devices and do scan
 		Intent serverIntent = new Intent(this, DeviceListActivity.class);
@@ -270,9 +455,23 @@ public class Play extends Activity implements OnClickListener {
 			}
 		}
 	}
+
+	public static int[] toIntArray(double[] s) {
+		int[] intArray = new int[s.length];
+		double a;
+		int b;
+		for (int i = 0; i < intArray.length; i++) {
+			a = s[i] * 100;
+			b = (int) a;
+			intArray[i] = b;
+		}
+
+		return intArray;
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
