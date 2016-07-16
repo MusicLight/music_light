@@ -140,13 +140,15 @@ public class MainActivity extends Activity {
 		});
 
 		button_send.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// Send a message using content of the edit text widget
-				
-				byte[] arr = { 5, 19, 26};
-				write(arr);
-			}
-		});
+	         public void onClick(View v) {
+	            // Send a message using content of the edit text widget
+	            
+	            byte arr = 5;
+	           byte arr2=3;
+	            write(arr);
+	            write(arr2);
+	         }
+	      });
 
 	}
 
@@ -254,24 +256,24 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-
-	public void write(byte[] arr) {
-		if (outStream != null) {
-			try {
-				outStream.write(arr);
-			} catch (IOException e) {
-			}
-		}
-	}
-
-	public void emptyOutStream() {
-		if (outStream != null) {
-			try {
-				outStream.flush();
-			} catch (IOException e) {
-			}
-		}
-	}
+	
+	 public void write(byte arr) {
+    	 if (outStream != null) {
+             try {
+            	 outStream.write(arr);
+             } catch (IOException e) {
+             }
+         }
+     }
+     
+     public void emptyOutStream() {
+    	 if (outStream != null) {
+             try {
+            	 outStream.flush();
+             } catch (IOException e) {
+             }
+         }
+     }
 
 	public void connect() {
 		// Launch the DeviceListActivity to see devices and do scan
