@@ -19,9 +19,13 @@ void setup() {
   Serial.begin(9600);
 
   pinMode(relay1, OUTPUT);
+  digitalWrite(relay1, HIGH);
   pinMode(relay2, OUTPUT);
+  digitalWrite(relay2, HIGH);
   pinMode(relay3, OUTPUT);
+  digitalWrite(relay3, HIGH);
   pinMode(relay4, OUTPUT);
+  digitalWrite(relay4, HIGH);
 }
 
 
@@ -37,43 +41,24 @@ void loop()
 
     switch (data) {
       case 0 ... 3 :
-        if (lay1State == 0) { // 릴레이1이 꺼져있을 경우
-          digitalWrite(relay1, HIGH);
-          lay1State = 1; // 릴레이1 상태를 켜진 상태로 세팅
-          delay(150);
-        }
-        else { // 릴레이1이 켜져있을 경우
-          digitalWrite(relay1, LOW);
-          lay1State = 0;
-          delay(150);
-        }
+        digitalWrite(relay1, LOW);
+        delay(150);
+        digitalWrite(relay1, HIGH);
         break;
 
       case 4 ... 6 :
-        if (lay2State == 0) { // 릴레이2이 꺼져있을 경우
-          digitalWrite(relay2, HIGH);
-          lay2State = 1; // 릴레이2 상태를 켜진 상태로 세팅
-          delay(150);
-        }
-        else { // 릴레이2이 켜져있을 경우
-          digitalWrite(relay2, LOW);
-          lay2State = 0;
-          delay(150);
-        }
+        digitalWrite(relay2, LOW);
+        delay(150);
+        digitalWrite(relay2, HIGH);
         break;
 
       case 7 ... 9 :
-        if (lay3State == 0) { // 릴레이3이 꺼져있을 경우
-          digitalWrite(relay3, HIGH);
-          lay3State = 1; // 릴레이3 상태를 켜진 상태로 세팅
-          delay(150);
-        }
-        else { // 릴레이3이 켜져있을 경우
-          digitalWrite(relay3, LOW);
-          lay3State = 0;
-          delay(150);
-        }
+        digitalWrite(relay3, LOW);
+        delay(150);
+        digitalWrite(relay3, HIGH);
         break;
+
+
     }
 
 
