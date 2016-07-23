@@ -40,24 +40,26 @@ void loop()
     Serial.print(data);
 
     switch (data) {
-      case 0 ... 3 :
+      case 0 ... 30 :
         digitalWrite(relay1, LOW);
         delay(150);
         digitalWrite(relay1, HIGH);
+        delay(150);
         break;
 
-      case 4 ... 6 :
+      case 31 ... 60 :
         digitalWrite(relay2, LOW);
         delay(150);
         digitalWrite(relay2, HIGH);
+        delay(150);
         break;
 
-      case 7 ... 9 :
+      case 61 ... 900 :
         digitalWrite(relay3, LOW);
         delay(150);
         digitalWrite(relay3, HIGH);
+        delay(150);
         break;
-
 
     }
 
