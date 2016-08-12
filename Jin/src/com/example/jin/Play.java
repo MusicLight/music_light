@@ -7,12 +7,19 @@ import com.example.jin.AudioStreamPlayer.State;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.AudioFormat;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+
 import android.widget.TextView;
 
 public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener
@@ -30,6 +37,18 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 
 	AudioStreamPlayer mAudioPlayer = null;
 	String path, fileName,s;
+	int frequency = 8000;
+	int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+	int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+	private RealDoubleFFT transformer;
+	int blockSize = 256;
+	ImageView imageView;
+	Bitmap bitmap;
+	Canvas canvas;
+	Paint paint;
+	
+	
+
 	
 	
 	@Override
@@ -58,6 +77,15 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 		String fileName = intent.getExtras().getString("fileName");
 		
 		s= path+fileName;
+		transformer = new RealDoubleFFT(blockSize);
+
+		// ImageView 및 관련 객체 설정 부분
+		imageView = (ImageView) findViewById(R.id.ImageView01);
+		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
+		canvas = new Canvas(bitmap);
+		paint = new Paint();
+		paint.setColor(Color.GREEN);
+		imageView.setImageBitmap(bitmap);
 	}
 
 	@Override
@@ -147,13 +175,25 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 
 		try
 		{
-			mAudioPlayer.play();
+			
+			double[] toTransform = new double[blockSize];
+ 			mAudioPlayer.play();
+			toTransform=mAudioPlayer.arr;
+			
+			
+			transformer.ft(toTransform);
+			
+			
+			
+			onProgressUpdate(toTransform);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 	}
+
+	
 
 	private void releaseAudioPlayer()
 	{
@@ -172,6 +212,19 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 		{
 			this.mAudioPlayer.stop();
 		}
+	}
+	
+	private void onProgressUpdate(double[] toTransform) {
+		canvas.drawColor(Color.BLACK);
+
+		for (int i = 0; i < toTransform.length; i++) {
+			int x = i;
+			int downy = (int) (100 - (toTransform[i] * 10));
+			int upy = 100;
+
+			canvas.drawLine(x, downy, x, upy, paint);
+		}
+		imageView.invalidate();
 	}
 
 	@Override

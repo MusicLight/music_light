@@ -27,6 +27,9 @@ public class AudioStreamPlayer
 	private volatile boolean isPause = false;
 
 	protected OnAudioStreamInterface mListener = null;
+	
+	byte[] decode;
+	double[] arr= new double[256];
 
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
 	{
@@ -140,7 +143,7 @@ public class AudioStreamPlayer
 		}
 	};
 
-	private void decodeLoop()
+	public void decodeLoop()
 	{
 		ByteBuffer[] codecInputBuffers;
 		ByteBuffer[] codecOutputBuffers;
@@ -263,12 +266,24 @@ public class AudioStreamPlayer
 				int outputBufIndex = res;
 				ByteBuffer buf = codecOutputBuffers[outputBufIndex];
 
-				final byte[] chunk = new byte[info.size];
+				byte[] chunk = new byte[info.size];
 				buf.get(chunk);
 				buf.clear();
+				
+				decode = new byte[chunk.length];
+				
+				for(int i=0;i<chunk.length;i++){
+					decode[i]=chunk[i];
+				}
+				
+				Decode(decode);
+								
+				
 				if (chunk.length > 0)
 				{
 					mAudioTrack.write(chunk, 0, chunk.length);
+					
+					
 					if (this.mState != State.Playing)
 					{
 						mAudioPlayerHandler.onAudioPlayerPlayerStart(AudioStreamPlayer.this);
@@ -367,4 +382,24 @@ public class AudioStreamPlayer
 	{
 		isPause = false;
 	}
+	
+	public double[] Decode(byte[] a)
+	{
+		
+		for(int i=0;i<256;i++)
+		{
+			arr[i]=(double)a[i];
+		}
+		
+		return arr;
+	}
+	
+	
+	public byte[] getA(){
+		return decode;
+	}
+	public void setA(byte[] decode){
+		this.decode=decode;
+	}
+	
 }

@@ -2,8 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    
+    <ImageView
+        android:id="@+id/ImageView01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"       />
 
-    <RelativeLayout
+     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/seek_progress" >
@@ -22,6 +27,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true" />
     </RelativeLayout>
+   
+    
+    
 
     <SeekBar
         android:id="@+id/seek_progress"
