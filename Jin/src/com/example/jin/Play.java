@@ -47,9 +47,9 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 	Canvas canvas;
 	Paint paint;
 	
-	
+	byte[] buf;
+	double[] toTransform= new double[blockSize];
 
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -175,18 +175,15 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 
 		try
 		{
+			 			
+ 			mAudioPlayer.play();	
+ 			buf = mAudioPlayer.fftarr;
 			
-			double[] toTransform = new double[blockSize];
- 			mAudioPlayer.play();
-			toTransform=mAudioPlayer.arr;
-			
-			
-			transformer.ft(toTransform);
-			
-			
-			
-			onProgressUpdate(toTransform);
+			//onProgressUpdate(toTransform);
+		
 		}
+			
+			
 		catch (IOException e)
 		{
 			e.printStackTrace();
@@ -214,12 +211,12 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 		}
 	}
 	
-	private void onProgressUpdate(double[] toTransform) {
+	public void onProgressUpdate(double[]... toTransform) {
 		canvas.drawColor(Color.BLACK);
 
-		for (int i = 0; i < toTransform.length; i++) {
+		for (int i = 0; i < toTransform[0].length; i++) {
 			int x = i;
-			int downy = (int) (100 - (toTransform[i] * 10));
+			int downy = (int) (100 - (toTransform[0][i] * 10));
 			int upy = 100;
 
 			canvas.drawLine(x, downy, x, upy, paint);
@@ -377,15 +374,18 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 				if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause)
 				{
 					mAudioPlayer.pauseToPlay();
+					
 				}
 				else
 				{
 					pause();
+					
 				}
 			}
 			else
 			{
 				play();
+				
 			}
 			break;
 		}
@@ -396,5 +396,7 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 		}
 		}
 	}
+	
+	
 
 }

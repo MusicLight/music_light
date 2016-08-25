@@ -28,8 +28,8 @@ public class AudioStreamPlayer
 
 	protected OnAudioStreamInterface mListener = null;
 	
-	byte[] decode;
-	double[] arr= new double[256];
+	byte[] fftarr;
+	
 
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
 	{
@@ -266,22 +266,21 @@ public class AudioStreamPlayer
 				int outputBufIndex = res;
 				ByteBuffer buf = codecOutputBuffers[outputBufIndex];
 
-				byte[] chunk = new byte[info.size];
+				final byte[] chunk = new byte[info.size];
 				buf.get(chunk);
 				buf.clear();
 				
-				decode = new byte[chunk.length];
-				
-				for(int i=0;i<chunk.length;i++){
-					decode[i]=chunk[i];
+				fftarr = new byte[chunk.length];
+
+				for(int i=0;i<chunk.length&& i<256;i++){
+					fftarr[i]= chunk[i];
 				}
 				
-				Decode(decode);
-								
 				
 				if (chunk.length > 0)
 				{
 					mAudioTrack.write(chunk, 0, chunk.length);
+					
 					
 					
 					if (this.mState != State.Playing)
@@ -383,23 +382,10 @@ public class AudioStreamPlayer
 		isPause = false;
 	}
 	
-	public double[] Decode(byte[] a)
+	
+	public byte[] FFTFile()
 	{
-		
-		for(int i=0;i<256;i++)
-		{
-			arr[i]=(double)a[i];
-		}
-		
-		return arr;
-	}
-	
-	
-	public byte[] getA(){
-		return decode;
-	}
-	public void setA(byte[] decode){
-		this.decode=decode;
+		return this.fftarr;
 	}
 	
 }

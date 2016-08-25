@@ -65,7 +65,8 @@ public class RealDoubleFFT extends RealDoubleFFT_Mixed {
 	public void ft(double x[]) {
 		if (x.length != ndim)
 			throw new IllegalArgumentException("The length of data can not match that of the wavetable");
-		rfftf(ndim, x, wavetable);
+		
+			rfftf(ndim, x, wavetable);
 	}
 
 	/**
