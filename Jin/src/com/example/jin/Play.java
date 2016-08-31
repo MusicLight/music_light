@@ -176,8 +176,8 @@ public class Play extends Activity implements OnAudioStreamInterface, OnSeekBarC
 		try
 		{
 			 			
- 			mAudioPlayer.play();	
- 			buf = mAudioPlayer.fftarr;
+          mAudioPlayer.play();	
+          buf = mAudioPlayer.fftarr;
 			
 			//onProgressUpdate(toTransform);
 		
