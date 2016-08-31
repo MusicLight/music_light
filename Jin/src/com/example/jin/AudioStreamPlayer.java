@@ -12,380 +12,757 @@ import android.media.MediaFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class AudioStreamPlayer
+import android.widget.TextView;
+
+public class AudioStreamPlayer extends Activity implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener
+
 {
-	private static final String TAG = "AudioStreamPlayer";
+   public static final String TAG = "AudioStreamPlayer";
 
-	private MediaExtractor mExtractor = null;
-	private MediaCodec mMediaCodec = null;
-	private AudioTrack mAudioTrack = null;
+   public MediaExtractor mExtractor = null;
+   public MediaCodec mMediaCodec = null;
+   public AudioTrack mAudioTrack = null;
 
-	private int mInputBufIndex = 0;
+   public int mInputBufIndex = 0;
 
-	private boolean isForceStop = false;
-	private volatile boolean isPause = false;
+   public boolean isForceStop = false;
+   public volatile boolean isPause = false;
 
-	protected OnAudioStreamInterface mListener = null;
-	
-	byte[] fftarr;
-	
+   public OnAudioStreamInterface mListener = null;
+   
+   byte[] fftarr;
+   public Button mPlayButton = null;
+   public Button mStopButton = null;
 
-	public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
-	{
-		this.mListener = listener;
-	}
+   public TextView mTextCurrentTime = null;
+   public TextView mTextDuration = null;
 
-	public enum State
-	{
-		Stopped, Prepare, Buffering, Playing, Pause
-	};
+   public SeekBar mSeekProgress = null;
 
-	State mState = State.Stopped;
+   public ProgressDialog mProgressDialog = null;
 
-	public State getState()
-	{
-		return mState;
-	}
+   AudioStreamPlayer mAudioPlayer = null;
+   String path, fileName,s;
+   int frequency = 8000;
+   int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+   int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+   private RealDoubleFFT transformer;
+   int blockSize = 256;
+   ImageView imageView;
+   Bitmap bitmap;
+   Canvas canvas;
+   Paint paint;
+   
+   
+   double[] toTransform= new double[blockSize];
 
-	private String mMediaPath;
 
-	public void setUrlString(String mUrlString)
-	{
-		this.mMediaPath = mUrlString;
-	}
+   @Override
+   protected void onCreate(Bundle savedInstanceState)
+   {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.player);
 
-	public AudioStreamPlayer()
-	{
-		mState = State.Stopped;
-	}
+      mPlayButton = (Button) this.findViewById(R.id.button_play);
+      mPlayButton.setOnClickListener(this);
+      mStopButton = (Button) this.findViewById(R.id.button_stop);
+      mStopButton.setOnClickListener(this);
 
-	public void play() throws IOException
-	{
-		mState = State.Prepare;
-		isForceStop = false;
+      mTextCurrentTime = (TextView) findViewById(R.id.text_pos);
+      mTextDuration = (TextView) findViewById(R.id.text_duration);
 
-		mAudioPlayerHandler.onAudioPlayerBuffering(AudioStreamPlayer.this);
+      mSeekProgress = (SeekBar) findViewById(R.id.seek_progress);
+      mSeekProgress.setOnSeekBarChangeListener(this);
+      mSeekProgress.setMax(0);
+      mSeekProgress.setProgress(0);
 
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				decodeLoop();
-			}
-		}).start();
-	}
+      updatePlayer(State.Stopped);
+      
+      Intent intent = getIntent();
+      String path = intent.getExtras().getString("path");
+      String fileName = intent.getExtras().getString("fileName");
+      
+      s= path+fileName;
+      transformer = new RealDoubleFFT(blockSize);
 
-	private DelegateHandler mAudioPlayerHandler = new DelegateHandler();
+      // ImageView 및 관련 객체 설정 부분
+      imageView = (ImageView) findViewById(R.id.ImageView01);
+      bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
+      canvas = new Canvas(bitmap);
+      paint = new Paint();
+      paint.setColor(Color.GREEN);
+      imageView.setImageBitmap(bitmap);
+   }
 
-	class DelegateHandler extends Handler
-	{
-		@Override
-		public void handleMessage(Message msg)
-		{
-		}
+   public void setOnAudioStreamInterface(OnAudioStreamInterface listener)
+   {
+      this.mListener = listener;
+   }
 
-		public void onAudioPlayerPlayerStart(AudioStreamPlayer player)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerStart(player);
-			}
-		}
+   public enum State
+   {
+      Stopped, Prepare, Buffering, Playing, Pause
+   };
 
-		public void onAudioPlayerStop(AudioStreamPlayer player)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerStop(player);
-			}
-		}
+   State mState = State.Stopped;
 
-		public void onAudioPlayerError(AudioStreamPlayer player)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerError(player);
-			}
-		}
+   public State getState()
+   {
+      return mState;
+   }
 
-		public void onAudioPlayerBuffering(AudioStreamPlayer player)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerBuffering(player);
-			}
-		}
+   public String mMediaPath;
 
-		public void onAudioPlayerDuration(int totalSec)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerDuration(totalSec);
-			}
-		}
+   public void setUrlString(String mUrlString)
+   {
+      this.mMediaPath = mUrlString;
+   }
 
-		public void onAudioPlayerCurrentTime(int sec)
-		{
-			if (mListener != null)
-			{
-				mListener.onAudioPlayerCurrentTime(sec);
-			}
-		}
+   public AudioStreamPlayer()
+   {
+      mState = State.Stopped;
+   }
 
-		public void onAudioPlayerPause()
-		{
-			if(mListener != null)
-			{
-				mListener.onAudioPlayerPause(AudioStreamPlayer.this);
-			}
-		}
-	};
+   public void play() 
+   {
+	   releaseAudioPlayer();
 
-	public void decodeLoop()
-	{
-		ByteBuffer[] codecInputBuffers;
-		ByteBuffer[] codecOutputBuffers;
+	      mAudioPlayer = new AudioStreamPlayer();
+	     // mAudioPlayer.setOnAudioStreamInterface(this);
+	      
+	      setUrlString(s);
+//////////////////////////////////////////////////////////////////////
+	            
+	           
+	         
+	      
+	         
+	         
+	      
+      mState = State.Prepare;
+      isForceStop = false;
 
-		mExtractor = new MediaExtractor();
-		try
-		{
-			mExtractor.setDataSource(this.mMediaPath);
-		}
-		catch (Exception e)
-		{
-			mAudioPlayerHandler.onAudioPlayerError(AudioStreamPlayer.this);
-			return;
-		}
+      mAudioPlayerHandler.onAudioPlayerBuffering(AudioStreamPlayer.this);
 
-		MediaFormat format = mExtractor.getTrackFormat(0);
-		String mime = format.getString(MediaFormat.KEY_MIME);
-		long duration = format.getLong(MediaFormat.KEY_DURATION);
-		int totalSec = (int) (duration / 1000 / 1000);
-		int min = totalSec / 60;
-		int sec = totalSec % 60;
+      new Thread(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            decodeLoop();
+         }
+      }).start();
+   } 
 
-		mAudioPlayerHandler.onAudioPlayerDuration(totalSec);
 
-		Log.d(TAG, "Time = " + min + " : " + sec);
-		Log.d(TAG, "Duration = " + duration);
+   public DelegateHandler mAudioPlayerHandler = new DelegateHandler();
 
-		mMediaCodec = MediaCodec.createDecoderByType(mime);
-		mMediaCodec.configure(format, null, null, 0);
-		mMediaCodec.start();
-		codecInputBuffers = mMediaCodec.getInputBuffers();
-		codecOutputBuffers = mMediaCodec.getOutputBuffers();
+   class DelegateHandler extends Handler
+   {
+      @Override
+      public void handleMessage(Message msg)
+      {
+      }
 
-		int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+      public void onAudioPlayerPlayerStart(AudioStreamPlayer player)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerStart(player);
+         }
+      }
 
-		Log.i(TAG, "mime " + mime);
-		Log.i(TAG, "sampleRate " + sampleRate);
+      public void onAudioPlayerStop(AudioStreamPlayer player)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerStop(player);
+         }
+      }
 
-		mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
-				AudioFormat.ENCODING_PCM_16BIT, AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
-						AudioFormat.ENCODING_PCM_16BIT), AudioTrack.MODE_STREAM);
+      public void onAudioPlayerError(AudioStreamPlayer player)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerError(player);
+         }
+      }
 
-		mAudioTrack.play();
-		mExtractor.selectTrack(0);
+      public void onAudioPlayerBuffering(AudioStreamPlayer player)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerBuffering(player);
+         }
+      }
 
-		final long kTimeOutUs = 10000;
-		MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
-		boolean sawInputEOS = false;
-		int noOutputCounter = 0;
-		int noOutputCounterLimit = 50;
+      public void onAudioPlayerDuration(int totalSec)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerDuration(totalSec);
+         }
+      }
 
-		while (!sawInputEOS && noOutputCounter < noOutputCounterLimit && !isForceStop)
-		{
-			if (!sawInputEOS)
-			{
-				if(isPause)
-				{
-					if(mState != State.Pause)
-					{
-						mState = State.Pause;
-						
-						mAudioPlayerHandler.onAudioPlayerPause();
-					}
-					continue;
-				}
-				noOutputCounter++;
-				if (isSeek)
-				{
-					mExtractor.seekTo(seekTime * 1000 * 1000, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-					isSeek = false;
-				}
+      public void onAudioPlayerCurrentTime(int sec)
+      {
+         if (mListener != null)
+         {
+            mListener.onAudioPlayerCurrentTime(sec);
+         }
+      }
 
-				mInputBufIndex = mMediaCodec.dequeueInputBuffer(kTimeOutUs);
-				if (mInputBufIndex >= 0)
-				{
-					ByteBuffer dstBuf = codecInputBuffers[mInputBufIndex];
+      public void onAudioPlayerPause()
+      {
+         if(mListener != null)
+         {
+            mListener.onAudioPlayerPause(AudioStreamPlayer.this);
+         }
+      }
+   };
 
-					int sampleSize = mExtractor.readSampleData(dstBuf, 0);
+   public void decodeLoop()
+   {
+      ByteBuffer[] codecInputBuffers;
+      ByteBuffer[] codecOutputBuffers;
 
-					long presentationTimeUs = 0;
+      mExtractor = new MediaExtractor();
+      try
+      {
+         mExtractor.setDataSource(this.mMediaPath);
+      }
+      catch (Exception e)
+      {
+         mAudioPlayerHandler.onAudioPlayerError(AudioStreamPlayer.this);
+         return;
+      }
 
-					if (sampleSize < 0)
-					{
-						Log.d(TAG, "saw input EOS.");
-						sawInputEOS = true;
-						sampleSize = 0;
-					}
-					else
-					{
-						presentationTimeUs = mExtractor.getSampleTime();
+      MediaFormat format = mExtractor.getTrackFormat(0);
+      String mime = format.getString(MediaFormat.KEY_MIME);
+      long duration = format.getLong(MediaFormat.KEY_DURATION);
+      int totalSec = (int) (duration / 1000 / 1000);
+      int min = totalSec / 60;
+      int sec = totalSec % 60;
 
-						Log.d(TAG, "presentaionTime = " + (int) (presentationTimeUs / 1000 / 1000));
+      mAudioPlayerHandler.onAudioPlayerDuration(totalSec);
 
-						mAudioPlayerHandler.onAudioPlayerCurrentTime((int) (presentationTimeUs / 1000 / 1000));
-					}
+      Log.d(TAG, "Time = " + min + " : " + sec);
+      Log.d(TAG, "Duration = " + duration);
 
-					mMediaCodec.queueInputBuffer(mInputBufIndex, 0, sampleSize, presentationTimeUs,
-							sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0);
+      mMediaCodec = MediaCodec.createDecoderByType(mime);
+      mMediaCodec.configure(format, null, null, 0);
+      mMediaCodec.start();
+      codecInputBuffers = mMediaCodec.getInputBuffers();
+      codecOutputBuffers = mMediaCodec.getOutputBuffers();
 
-					if (!sawInputEOS)
-					{
-						mExtractor.advance();
-					}
-				}
-				else
-				{
-					Log.e(TAG, "inputBufIndex " + mInputBufIndex);
-				}
-			}
+      int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
 
-			int res = mMediaCodec.dequeueOutputBuffer(info, kTimeOutUs);
+      Log.i(TAG, "mime " + mime);
+      Log.i(TAG, "sampleRate " + sampleRate);
 
-			if (res >= 0)
-			{
-				if (info.size > 0)
-				{
-					noOutputCounter = 0;
-				}
+      mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
+            AudioFormat.ENCODING_PCM_16BIT, AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
+                  AudioFormat.ENCODING_PCM_16BIT), AudioTrack.MODE_STREAM);
 
-				int outputBufIndex = res;
-				ByteBuffer buf = codecOutputBuffers[outputBufIndex];
+      mAudioTrack.play();
+      mExtractor.selectTrack(0);
 
-				final byte[] chunk = new byte[info.size];
-				buf.get(chunk);
-				buf.clear();
-				
-				fftarr = new byte[chunk.length];
+      final long kTimeOutUs = 10000;
+      MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+      boolean sawInputEOS = false;
+      int noOutputCounter = 0;
+      int noOutputCounterLimit = 50;
 
-				for(int i=0;i<chunk.length&& i<256;i++){
-					fftarr[i]= chunk[i];
-				}
-				
-				
-				if (chunk.length > 0)
-				{
-					mAudioTrack.write(chunk, 0, chunk.length);
-					
-					
-					
-					if (this.mState != State.Playing)
-					{
-						mAudioPlayerHandler.onAudioPlayerPlayerStart(AudioStreamPlayer.this);
-					}
-					this.mState = State.Playing;
-				}
-				mMediaCodec.releaseOutputBuffer(outputBufIndex, false);
-			}
-			else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED)
-			{
-				codecOutputBuffers = mMediaCodec.getOutputBuffers();
+      while (!sawInputEOS && noOutputCounter < noOutputCounterLimit && !isForceStop)
+      {
+         if (!sawInputEOS)
+         {
+            if(isPause)
+            {
+               if(mState != State.Pause)
+               {
+                  mState = State.Pause;
+                  
+                  mAudioPlayerHandler.onAudioPlayerPause();
+               }
+               continue;
+            }
+            noOutputCounter++;
+            if (isSeek)
+            {
+               mExtractor.seekTo(seekTime * 1000 * 1000, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+               isSeek = false;
+            }
 
-				Log.d(TAG, "output buffers have changed.");
-			}
-			else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
-			{
-				MediaFormat oformat = mMediaCodec.getOutputFormat();
+            mInputBufIndex = mMediaCodec.dequeueInputBuffer(kTimeOutUs);
+            if (mInputBufIndex >= 0)
+            {
+               ByteBuffer dstBuf = codecInputBuffers[mInputBufIndex];
 
-				Log.d(TAG, "output format has changed to " + oformat);
-			}
-			else
-			{
-				Log.d(TAG, "dequeueOutputBuffer returned " + res);
-			}
-		}
+               int sampleSize = mExtractor.readSampleData(dstBuf, 0);
 
-		Log.d(TAG, "stopping...");
+               long presentationTimeUs = 0;
 
-		releaseResources(true);
+               if (sampleSize < 0)
+               {
+                  Log.d(TAG, "saw input EOS.");
+                  sawInputEOS = true;
+                  sampleSize = 0;
+               }
+               else
+               {
+                  presentationTimeUs = mExtractor.getSampleTime();
 
-		this.mState = State.Stopped;
-		isForceStop = true;
+                  Log.d(TAG, "presentaionTime = " + (int) (presentationTimeUs / 1000 / 1000));
 
-		if (noOutputCounter >= noOutputCounterLimit)
-		{
-			mAudioPlayerHandler.onAudioPlayerError(AudioStreamPlayer.this);
-		}
-		else
-		{
-			mAudioPlayerHandler.onAudioPlayerStop(AudioStreamPlayer.this);
-		}
-	}
+                  mAudioPlayerHandler.onAudioPlayerCurrentTime((int) (presentationTimeUs / 1000 / 1000));
+               }
 
-	public void release()
-	{
-		stop();
-		releaseResources(false);
-	}
+               mMediaCodec.queueInputBuffer(mInputBufIndex, 0, sampleSize, presentationTimeUs,
+                     sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0);
 
-	private void releaseResources(Boolean release)
-	{
-		if (mExtractor != null)
-		{
-			mExtractor.release();
-			mExtractor = null;
-		}
+               if (!sawInputEOS)
+               {
+                  mExtractor.advance();
+               }
+            }
+            else
+            {
+               Log.e(TAG, "inputBufIndex " + mInputBufIndex);
+            }
+         }
 
-		if (mMediaCodec != null)
-		{
-			if (release)
-			{
-				mMediaCodec.stop();
-				mMediaCodec.release();
-				mMediaCodec = null;
-			}
+         int res = mMediaCodec.dequeueOutputBuffer(info, kTimeOutUs);
 
-		}
-		if (mAudioTrack != null)
-		{
-			mAudioTrack.flush();
-			mAudioTrack.release();
-			mAudioTrack = null;
-		}
-	}
+         if (res >= 0)
+         {
+            if (info.size > 0)
+            {
+               noOutputCounter = 0;
+            }
 
-	public void pause()
-	{
-		isPause = true;
-	}
+            int outputBufIndex = res;
+            ByteBuffer buf = codecOutputBuffers[outputBufIndex];
 
-	public void stop()
-	{
-		isForceStop = true;
-	}
+            final byte[] chunk = new byte[info.size];
+            buf.get(chunk);
+            buf.clear();
+            
+            transformer.ft(toTransform);
+            onProgressUpdate(toTransform);
+            
+	      
+            
+            
+            if (chunk.length > 0)
+            {
+               mAudioTrack.write(chunk, 0, chunk.length);
+               
+              
+               for(int i=0;i<256;i++){
+               	toTransform[i]=(double)chunk[i]/32768.0;
+               	}
+               
+               
+               if (this.mState != State.Playing)
+               {
+                  mAudioPlayerHandler.onAudioPlayerPlayerStart(AudioStreamPlayer.this);
+               }
+               this.mState = State.Playing;
+            }
+            mMediaCodec.releaseOutputBuffer(outputBufIndex, false);
+         }
+         else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED)
+         {
+            codecOutputBuffers = mMediaCodec.getOutputBuffers();
 
-	boolean isSeek = false;
-	int seekTime = 0;
+            Log.d(TAG, "output buffers have changed.");
+         }
+         else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
+         {
+            MediaFormat oformat = mMediaCodec.getOutputFormat();
 
-	public void seekTo(int progress)
-	{
-		isSeek = true;
-		seekTime = progress;
-	}
+            Log.d(TAG, "output format has changed to " + oformat);
+         }
+         else
+         {
+            Log.d(TAG, "dequeueOutputBuffer returned " + res);
+         }
+      }
 
-	public void pauseToPlay()
-	{
-		isPause = false;
-	}
-	
-	
-	public byte[] FFTFile()
-	{
-		return this.fftarr;
-	}
-	
+      Log.d(TAG, "stopping...");
+
+      releaseResources(true);
+
+      this.mState = State.Stopped;
+      isForceStop = true;
+
+      if (noOutputCounter >= noOutputCounterLimit)
+      {
+         mAudioPlayerHandler.onAudioPlayerError(AudioStreamPlayer.this);
+      }
+      else
+      {
+         mAudioPlayerHandler.onAudioPlayerStop(AudioStreamPlayer.this);
+      }
+   }
+
+   public void release()
+   {
+      stop();
+      releaseResources(false);
+   }
+
+   public void releaseResources(Boolean release)
+   {
+      if (mExtractor != null)
+      {
+         mExtractor.release();
+         mExtractor = null;
+      }
+
+      if (mMediaCodec != null)
+      {
+         if (release)
+         {
+            mMediaCodec.stop();
+            mMediaCodec.release();
+            mMediaCodec = null;
+         }
+
+      }
+      if (mAudioTrack != null)
+      {
+         mAudioTrack.flush();
+         mAudioTrack.release();
+         mAudioTrack = null;
+      }
+   }
+
+   public void pause()
+   {
+	   if (this.mAudioPlayer != null)
+	      {
+	         this.mAudioPlayer.pause();
+	      }
+      isPause = true;
+      
+   }
+
+   public void stop()
+   {
+	   if (this.mAudioPlayer != null)
+	      {
+	         this.mAudioPlayer.stop();
+	      }
+      isForceStop = true;
+      
+   }
+
+   boolean isSeek = false;
+   int seekTime = 0;
+
+   public void seekTo(int progress)
+   {
+      isSeek = true;
+      seekTime = progress;
+   }
+
+   public void pauseToPlay()
+   {
+      isPause = false;
+   }
+   
+   
+   @Override
+   public void onDestroy()
+   {
+      super.onDestroy();
+
+      stop();
+   }
+
+  public void updatePlayer(AudioStreamPlayer.State state)
+   {
+      switch (state)
+      {
+      case Stopped:
+      {
+         if (mProgressDialog != null)
+         {
+            mProgressDialog.cancel();
+            mProgressDialog.dismiss();
+
+            mProgressDialog = null;
+         }
+         mPlayButton.setSelected(false);
+         mPlayButton.setText("Play");
+
+         mTextCurrentTime.setText("00:00");
+         mTextDuration.setText("00:00");
+
+         mSeekProgress.setMax(0);
+         mSeekProgress.setProgress(0);
+
+         break;
+      }
+      case Prepare:
+      case Buffering:
+      {
+         if (mProgressDialog == null)
+         {
+            mProgressDialog = new ProgressDialog(this);
+         }
+         mProgressDialog.show();
+
+         mPlayButton.setSelected(false);
+         mPlayButton.setText("Play");
+
+         mTextCurrentTime.setText("00:00");
+         mTextDuration.setText("00:00");
+         break;
+      }
+      case Pause:
+      {
+         break;
+      }
+      case Playing:
+      {
+         if (mProgressDialog != null)
+         {
+            mProgressDialog.cancel();
+            mProgressDialog.dismiss();
+
+            mProgressDialog = null;
+         }
+         mPlayButton.setSelected(true);
+         mPlayButton.setText("Pause");
+         break;
+      }
+      }
+   }
+
+
+   public void releaseAudioPlayer()
+   {
+      if (mAudioPlayer != null)
+      {
+         mAudioPlayer.stop();
+         mAudioPlayer.release();
+         mAudioPlayer = null;
+
+      }
+   }
+
+ 
+   
+  
+
+   @Override
+   public void onAudioPlayerStart(AudioStreamPlayer player)
+   {
+      runOnUiThread(new Runnable()
+      {
+
+         @Override
+         public void run()
+         {
+            updatePlayer(State.Playing);
+         }
+      });
+   }
+
+   @Override
+   public void onAudioPlayerStop(AudioStreamPlayer player)
+   {
+      runOnUiThread(new Runnable()
+      {
+
+         @Override
+         public void run()
+         {
+            updatePlayer(State.Stopped);
+         }
+      });
+
+   }
+
+   @Override
+   public void onAudioPlayerError(AudioStreamPlayer player)
+   {
+      runOnUiThread(new Runnable()
+      {
+
+         @Override
+         public void run()
+         {
+            updatePlayer(State.Stopped);
+         }
+      });
+
+   }
+
+   @Override
+   public void onAudioPlayerBuffering(AudioStreamPlayer player)
+   {
+      runOnUiThread(new Runnable()
+      {
+
+         @Override
+         public void run()
+         {
+            updatePlayer(State.Buffering);
+         }
+      });
+
+   }
+
+   @Override
+   public void onAudioPlayerDuration(final int totalSec)
+   {
+      runOnUiThread(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            if (totalSec > 0)
+            {
+               int min = totalSec / 60;
+               int sec = totalSec % 60;
+
+               mTextDuration.setText(String.format("%02d:%02d", min, sec));
+
+               mSeekProgress.setMax(totalSec);
+            }
+         }
+
+      });
+   }
+
+   @Override
+   public void onAudioPlayerCurrentTime(final int sec)
+   {
+      runOnUiThread(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            if (!isSeekBarTouch)
+            {
+               int m = sec / 60;
+               int s = sec % 60;
+
+               mTextCurrentTime.setText(String.format("%02d:%02d", m, s));
+
+               mSeekProgress.setProgress(sec);
+            }
+         }
+      });
+   }
+
+   @Override
+   public void onAudioPlayerPause(AudioStreamPlayer player)
+   {
+      runOnUiThread(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            mPlayButton.setText("Play");
+         }
+      });
+   }
+
+   public boolean isSeekBarTouch = false;
+
+   @Override
+   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+   {
+   }
+
+   @Override
+   public void onStartTrackingTouch(SeekBar seekBar)
+   {
+      this.isSeekBarTouch = true;
+   }
+
+   @Override
+   public void onStopTrackingTouch(SeekBar seekBar)
+   {
+      this.isSeekBarTouch = false;
+
+      int progress = seekBar.getProgress();
+
+      this.mAudioPlayer.seekTo(progress);
+   }
+
+   
+
+   
+     
+   public void onProgressUpdate(double[]... toTransform) {
+	      canvas.drawColor(Color.BLACK);
+
+	      for (int i = 0; i < toTransform[0].length; i++) {
+	         int x = i;
+	         int downy = (int) (100 - (toTransform[0][i] * 500));
+	         int upy = 100;
+
+	         canvas.drawLine(x, downy, x, upy, paint);
+	      }
+	      imageView.postInvalidate();
+	   }
+   
+   @Override
+   public void onClick(View v)
+   {
+      switch (v.getId())
+      {
+      case R.id.button_play:
+      {
+         if (mPlayButton.isSelected())
+         {
+            if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause)
+            {
+               mAudioPlayer.pauseToPlay();
+               
+            }
+            else
+            {
+               pause();
+               
+            }
+         }
+         else
+         {
+            play();
+            
+         }
+         
+         break;
+      }
+      case R.id.button_stop:
+      {
+         stop();
+         break;
+      }
+      }
+   }
+
+   
 }

@@ -28,8 +28,8 @@
             </intent-filter>
         </activity>
          <activity
-            android:name="Play"
-            android:label="Play" >
+            android:name="AudioStreamPlayer"
+            android:label="AudioStreamPlayer" >
         </activity>
         <activity
             android:name="FileExplorer"

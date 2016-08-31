@@ -32,7 +32,7 @@ public class FileExplorer extends Activity {
 			public void onSelected(String path, String fileName) {
 				// TODO Auto-generated method stub
 				((TextView) findViewById(R.id.FilePath)).setText("°æ·Î : " + path);
-				Intent intent = new Intent(getApplicationContext(), Play.class);
+				Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 				intent.putExtra("path", path);
 				intent.putExtra("fileName", fileName);
 				startActivity(intent);
@@ -49,7 +49,7 @@ public class FileExplorer extends Activity {
 	}
 
 	public void Listener(View target) {
-		Intent intent = new Intent(getApplicationContext(), Play.class);
+		Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 		startActivity(intent);
 	}
 }
