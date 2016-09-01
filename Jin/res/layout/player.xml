@@ -62,5 +62,10 @@
             android:layout_gravity="center"
             android:text="Stop" />
     </LinearLayout>
-
+    
+    <Button
+        android:id="@+id/connect_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/disconnected" />
 </RelativeLayout>
