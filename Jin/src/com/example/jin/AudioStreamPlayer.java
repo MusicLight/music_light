@@ -74,7 +74,8 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
    Paint paint;
    int[] arr = new int[blockSize];
 	int a;
-	byte b, cc, dd, ee;
+	byte b;
+	byte [] xxx= new byte[7];
 	byte[] abc = new byte[blockSize];
 
    
@@ -573,15 +574,32 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 				b = (byte) a;
 				abc[i] = b;
 			}
-			cc = abc[10];
-			dd = abc[20];
-			ee = abc[30];
+			xxx[1] = abc[50];
+			xxx[3] = abc[110];
+			xxx[5] = abc[170];
+			
+			if(xxx[1]==0)
+				{xxx[0]=0;}
+			else
+				{xxx[0]='A';}
+			
+			if(xxx[3]==0)
+				{xxx[2]=0;}
+			else
+				{xxx[2]='B';}
+			
+			
+			if(xxx[5]==0)
+				{xxx[4]=0;}
+			else
+				{xxx[4]='C';}
+			
+			xxx[6]='/';
 
-			write(cc);
-			write(dd);
-			write(ee);
-	      
-            
+			for(int i=0;i<7;i++)
+			{
+			write(xxx[i]);
+			}
             
             if (chunk.length > 0)
             {
@@ -983,6 +1001,7 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 	public void write(byte cc) {
 		if (outStream != null) {
 			try {
+				
 				outStream.write(cc);
 			} catch (IOException e) {
 			}
