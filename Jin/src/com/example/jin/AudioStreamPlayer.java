@@ -61,7 +61,7 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 
    public ProgressDialog mProgressDialog = null;
 
-   AudioStreamPlayer mAudioPlayer = null;
+   
    String path, fileName,s;
    int frequency = 8000;
    int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -328,13 +328,6 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
       return mState;
    }
 
-   public String mMediaPath;
-
-   public void setUrlString(String mUrlString)
-   {
-      this.mMediaPath = mUrlString;
-   }
-
    public AudioStreamPlayer()
    {
       mState = State.Stopped;
@@ -342,19 +335,9 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 
    public void play() 
    {
-	   releaseAudioPlayer();
-
-	      mAudioPlayer = new AudioStreamPlayer();
-	     // mAudioPlayer.setOnAudioStreamInterface(this);
-	      
-	      setUrlString(s);
-//////////////////////////////////////////////////////////////////////
-	            
-	           
-	         
-	      
-	         
-	         
+	  stop();
+	  release();
+	  setOnAudioStreamInterface(this);
 	      
       mState = State.Prepare;
       isForceStop = false;
@@ -446,7 +429,8 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
       mExtractor = new MediaExtractor();
       try
       {
-         mExtractor.setDataSource(this.mMediaPath);
+         mExtractor.setDataSource(s);
+         
       }
       catch (Exception e)
       {
@@ -688,21 +672,14 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 
    public void pause()
    {
-	   if (this.mAudioPlayer != null)
-	      {
-	         this.mAudioPlayer.pause();
-	      }
+	   
       isPause = true;
       
    }
 
    public void stop()
    {
-	   if (this.mAudioPlayer != null)
-	      {
-	         this.mAudioPlayer.stop();
-	      }
-      isForceStop = true;
+	  isForceStop = true;
       
    }
 
@@ -715,11 +692,7 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
       seekTime = progress;
    }
 
-   public void pauseToPlay()
-   {
-      isPause = false;
-   }
-   
+ 
    
    @Override
    public void onDestroy()
@@ -790,17 +763,7 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
    }
 
 
-   public void releaseAudioPlayer()
-   {
-      if (mAudioPlayer != null)
-      {
-         mAudioPlayer.stop();
-         mAudioPlayer.release();
-         mAudioPlayer = null;
-
-      }
-   }
-
+  
  
    
   
@@ -940,7 +903,7 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
 
       int progress = seekBar.getProgress();
 
-      this.mAudioPlayer.seekTo(progress);
+      this.seekTo(progress);
    }
 
    
@@ -970,9 +933,9 @@ public class AudioStreamPlayer extends Activity implements OnAudioStreamInterfac
       {
          if (mPlayButton.isSelected())
          {
-            if (mAudioPlayer != null && mAudioPlayer.getState() == State.Pause)
+            if (getState() == State.Pause)
             {
-               mAudioPlayer.pauseToPlay();
+            	isPause = false;
                
             }
             else
