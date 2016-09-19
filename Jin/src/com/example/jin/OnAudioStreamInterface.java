@@ -1,9 +1,8 @@
 package com.example.jin;
 
-public interface OnAudioStreamInterface
-{
+public interface OnAudioStreamInterface {
 	public void onAudioPlayerStart(AudioStreamPlayer player);
-	
+
 	public void onAudioPlayerPause(AudioStreamPlayer player);
 
 	public void onAudioPlayerStop(AudioStreamPlayer player);

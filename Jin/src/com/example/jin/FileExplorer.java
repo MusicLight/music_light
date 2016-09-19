@@ -22,7 +22,7 @@ public class FileExplorer extends Activity {
 		_FileList.setOnPathChangedListener(new OnPathChangedListener() {
 			@Override
 			public void onChanged(String path) {
-				// TODO Auto-generated method stub
+				
 				((TextView) findViewById(R.id.FilePath)).setText("경로 : " + path);
 			}
 		});
@@ -30,7 +30,7 @@ public class FileExplorer extends Activity {
 		_FileList.setOnFileSelected(new OnFileSelectedListener() {
 			@Override
 			public void onSelected(String path, String fileName) {
-				// TODO Auto-generated method stub
+				
 				((TextView) findViewById(R.id.FilePath)).setText("경로 : " + path);
 				Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 				intent.putExtra("path", path);

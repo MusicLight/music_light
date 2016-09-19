@@ -1,14 +1,7 @@
 package com.example.jin;
 
-/**
- * @author Baoshe Zhang
- * @author Astronomical Instrument Group of University of Lethbridge.
- */
 class RealDoubleFFT_Mixed {
 
-	/*-------------------------------------------------
-	   radf2: Real FFT's forward processing of factor 2
-	  -------------------------------------------------*/
 	void radf2(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		int i, k, ic;
 		double ti2, tr2;
@@ -44,9 +37,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radb2: Real FFT's backward processing of factor 2
-	  -------------------------------------------------*/
 	void radb2(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		int i, k, ic;
 		double ti2, tr2;
@@ -79,9 +69,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radf3: Real FFT's forward processing of factor 3 
-	  -------------------------------------------------*/
 	void radf3(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double taur = -0.5D;
 		final double taui = 0.866025403784439D;
@@ -124,9 +111,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radb3: Real FFT's backward processing of factor 3
-	  -------------------------------------------------*/
 	void radb3(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double taur = -0.5D;
 		final double taui = 0.866025403784439D;
@@ -169,9 +153,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radf4: Real FFT's forward processing of factor 4
-	  -------------------------------------------------*/
 	void radf4(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double hsqt2 = 0.7071067811865475D;
 		int i, k, ic;
@@ -237,9 +218,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radb4: Real FFT's backward processing of factor 4
-	  -------------------------------------------------*/
 	void radb4(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double sqrt2 = 1.414213562373095D;
 		int i, k, ic;
@@ -305,9 +283,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radf5: Real FFT's forward processing of factor 5
-	  -------------------------------------------------*/
 	void radf5(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double tr11 = 0.309016994374947D;
 		final double ti11 = 0.951056516295154D;
@@ -382,9 +357,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*-------------------------------------------------
-	   radb5: Real FFT's backward processing of factor 5
-	  -------------------------------------------------*/
 	void radb5(int ido, int l1, final double cc[], double ch[], final double wtable[], int offset) {
 		final double tr11 = 0.309016994374947D;
 		final double ti11 = 0.951056516295154D;
@@ -459,9 +431,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*---------------------------------------------------------
-	   radfg: Real FFT's forward processing of general factor
-	  --------------------------------------------------------*/
 	void radfg(int ido, int ip, int l1, int idl1, double cc[], double c1[], double c2[], double ch[], double ch2[],
 			final double wtable[], int offset) {
 		final double twopi = 2.0D * Math.PI; // 6.28318530717959;
@@ -640,12 +609,9 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*---------------------------------------------------------
-	   radbg: Real FFT's backward processing of general factor
-	  --------------------------------------------------------*/
 	void radbg(int ido, int ip, int l1, int idl1, double cc[], double c1[], double c2[], double ch[], double ch2[],
 			final double wtable[], int offset) {
-		final double twopi = 2.0D * Math.PI; // 6.28318530717959;
+		final double twopi = 2.0D * Math.PI;
 		int idij, ipph, i, j, k, l, j2, ic, jc, lc, ik, is;
 		double dc2, ai1, ai2, ar1, ar2, ds2;
 		int nbd;
@@ -821,9 +787,6 @@ class RealDoubleFFT_Mixed {
 		}
 	}
 
-	/*---------------------------------------------------------
-	   rfftf1: further processing of Real forward FFT
-	  --------------------------------------------------------*/
 	void rfftf1(int n, double c[], final double wtable[], int offset) {
 		int i;
 		int k1, l1, l2, na, kh, nf, ip, iw, ido, idl1;
@@ -886,9 +849,6 @@ class RealDoubleFFT_Mixed {
 			c[i] = ch[i];
 	}
 
-	/*---------------------------------------------------------
-	   rfftb1: further processing of Real backward FFT
-	  --------------------------------------------------------*/
 	void rfftb1(int n, double c[], final double wtable[], int offset) {
 		int i;
 		int k1, l1, l2, na, nf, ip, iw, ido, idl1;
@@ -951,27 +911,18 @@ class RealDoubleFFT_Mixed {
 			c[i] = ch[i];
 	}
 
-	/*---------------------------------------------------------
-	   rfftf: Real forward FFT
-	  --------------------------------------------------------*/
 	void rfftf(int n, double r[], double wtable[]) {
 		if (n == 1)
 			return;
 		rfftf1(n, r, wtable, 0);
-	} /* rfftf */
+	}
 
-	/*---------------------------------------------------------
-	   rfftf: Real backward FFT
-	  --------------------------------------------------------*/
 	void rfftb(int n, double r[], double wtable[]) {
 		if (n == 1)
 			return;
 		rfftb1(n, r, wtable, 0);
-	} /* rfftb */
+	}
 
-	/*---------------------------------------------------------
-	   rffti1: further initialization of Real FFT
-	  --------------------------------------------------------*/
 	void rffti1(int n, double wtable[], int offset) {
 
 		final int[] ntryh = new int[] { 4, 2, 3, 5 };
@@ -1046,16 +997,12 @@ class RealDoubleFFT_Mixed {
 			}
 			l1 = l2;
 		}
-	} /* rffti1 */
+	}
 
-	/*---------------------------------------------------------
-	   rffti: Initialization of Real FFT
-	  --------------------------------------------------------*/
-	void rffti(int n, double wtable[]) /* length of wtable = 2*n + 15 */
-	{
+	void rffti(int n, double wtable[]) {
 		if (n == 1)
 			return;
 		rffti1(n, wtable, 0);
-	} /* rffti */
+	}
 
 }
