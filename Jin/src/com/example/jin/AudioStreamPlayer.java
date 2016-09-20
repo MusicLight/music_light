@@ -107,7 +107,7 @@ public class AudioStreamPlayer extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
-
+		
 		/******************************* 블루투스 **************************/
 
 		// Finds buttons in .xml layout file
@@ -186,7 +186,9 @@ public class AudioStreamPlayer extends Activity
 
 		s = path + fileName;
 		transformer = new RealDoubleFFT(blockSize);
-
+		
+		((TextView) findViewById(R.id.songname)).setBackgroundColor(Color.parseColor("#ffdab9"));
+		((TextView) findViewById(R.id.songname)).setText(fileName);
 		// ImageView 및 관련 객체 설정 부분
 		imageView = (ImageView) findViewById(R.id.ImageView01);
 		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);

@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:text="@string/disconnected" />
 
+    <TextView
+        android:id="@+id/songname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+
     <ImageView
         android:id="@+id/ImageView01"
         android:layout_width="match_parent"
