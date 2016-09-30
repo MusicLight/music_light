@@ -17,8 +17,8 @@ void setup() {
 //byte arr[6] = {0b1111,  0b1010, 0b0000, 0b0101, 0b1111, 0b0000};
 //byte arr2[6] = {0b0000,  0b1010, 0b1111, 0b0101, 0b1111, 0b0000};
 
-byte aaa[3] = {0b10101010, 0b01010101, 0b10101010};
-//byte bbb[3] = {0b00000000, 0b11111111, 0b00000000};
+byte aaa[3] = {0b11111111, 0b10101010, 0b11111111};
+byte bbb[3] = {0b00000000, 0b11111111, 0b00000000};
 
 void loop()
 {
@@ -28,8 +28,8 @@ void loop()
     Serial.println(i);
     shiftOut(data, clock, MSBFIRST, aaa[i]);
     Serial.println(aaa[i]);
-  //  shiftOut(data, clock, MSBFIRST, bbb[i]);
-  //  Serial.println(bbb[i]);
+    shiftOut(data, clock, MSBFIRST, bbb[i]);
+    Serial.println(bbb[i]);
     digitalWrite(latch, HIGH);
     Serial.println();
     delay(5000);
