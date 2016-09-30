@@ -5,6 +5,12 @@
     android:orientation="vertical" >
 
     <Button
+        android:id="@+id/connect_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/disconnected" />
+
+    <Button
         android:id="@+id/explorer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

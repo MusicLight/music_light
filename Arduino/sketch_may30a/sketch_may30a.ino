@@ -1,59 +1,42 @@
-#include <SoftwareSerial.h>
+int latch = 2;
+int clock = 3;
+int data = 4;
 
-SoftwareSerial BTSerial(8, 9); // SoftwareSerial(RX, TX)
-
-int relay1 = 2;
-int relay2 = 3;
-int relay3 = 4;
-int relay4 = 5;
 
 void setup() {
-  BTSerial.begin(9600);
+
+  pinMode(latch, OUTPUT);
+  pinMode(clock, OUTPUT);
+  pinMode(data, OUTPUT);
+
   Serial.begin(9600);
 
-  pinMode(relay1, OUTPUT);
-  digitalWrite(relay1, HIGH);
-  pinMode(relay2, OUTPUT);
-  digitalWrite(relay2, HIGH);
-  pinMode(relay3, OUTPUT);
-  digitalWrite(relay3, HIGH);
-  pinMode(relay4, OUTPUT);
-  digitalWrite(relay4, HIGH);
 }
 
-int i = 0;
+
+//byte arr[6] = {0b1111,  0b1010, 0b0000, 0b0101, 0b1111, 0b0000};
+//byte arr2[6] = {0b0000,  0b1010, 0b1111, 0b0101, 0b1111, 0b0000};
+
+byte aaa[3] = {0b10101010, 0b01010101, 0b10101010};
+//byte bbb[3] = {0b00000000, 0b11111111, 0b00000000};
 
 void loop()
 {
-  byte recv[1000];
+  for (int i = 0; i < 3; i++)
+  {
+    digitalWrite(latch, LOW);
+    Serial.println(i);
+    shiftOut(data, clock, MSBFIRST, aaa[i]);
+    Serial.println(aaa[i]);
+  //  shiftOut(data, clock, MSBFIRST, bbb[i]);
+  //  Serial.println(bbb[i]);
+    digitalWrite(latch, HIGH);
+    Serial.println();
+    delay(5000);
+  }
 
-  if (BTSerial.available()) {
-    int recvchar =  BTSerial.read();
-    recv[i] = recvchar;
-    Serial.println(recv[i]);
-    i++;
-
-    switch (recv[i]) {
-      case 0 ... 5 :
-        digitalWrite(relay1, LOW);
-        delay(150);
-        digitalWrite(relay1, HIGH);
-        delay(150);
-        break;
-
-      case 6 ... 10 :
-        digitalWrite(relay2, LOW);
-        delay(150);
-        digitalWrite(relay2, HIGH);
-        delay(150);
-        break;
-
-      case 11 ... 101 :
-        digitalWrite(relay3, LOW);
-        delay(150);
-        digitalWrite(relay3, HIGH);
-        delay(150);
-        break;
-    }
-  } 
 }
+
+
+
+

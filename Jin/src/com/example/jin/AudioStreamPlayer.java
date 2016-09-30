@@ -83,7 +83,8 @@ public class AudioStreamPlayer extends Activity
 	private static final int REQUEST_ENABLE_BT = 2;
 
 	// Program variables
-	private boolean connectStat = false;
+
+
 	private Button connect_button;
 	protected static final int MOVE_TIME = 80;
 	OnClickListener myClickListener;
