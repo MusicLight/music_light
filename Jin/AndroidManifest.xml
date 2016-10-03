@@ -39,6 +39,13 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
             android:theme="@android:style/Theme.Dialog" />
+        
+                <!-- Service -->
+        <service
+            android:name= ".AudioStreamplayer"
+            android:enabled="true" >
+        </service>
+        
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
