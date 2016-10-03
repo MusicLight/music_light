@@ -72,10 +72,11 @@ public class AudioStreamPlayer extends Activity
 	Canvas canvas;
 	Paint paint;
 
-	byte[] xxx = new byte[7];
+	byte[] xxx = new byte[9];
 	byte[] abc = new byte[blockSize];
 
 	double[] toTransform = new double[blockSize];
+
 
 	/******************************* 블루투스 ******************************/
 	// Intent request codes
@@ -107,6 +108,40 @@ public class AudioStreamPlayer extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
+		
+		
+
+		mPlayButton = (Button) this.findViewById(R.id.button_play);
+		mPlayButton.setOnClickListener(this);
+		mStopButton = (Button) this.findViewById(R.id.button_stop);
+		mStopButton.setOnClickListener(this);
+
+		mTextCurrentTime = (TextView) findViewById(R.id.text_pos);
+		mTextDuration = (TextView) findViewById(R.id.text_duration);
+
+		mSeekProgress = (SeekBar) findViewById(R.id.seek_progress);
+		mSeekProgress.setOnSeekBarChangeListener(this);
+		mSeekProgress.setMax(0);
+		mSeekProgress.setProgress(0);
+
+		updatePlayer(State.Stopped);
+
+		Intent intent = getIntent();
+		String path = intent.getExtras().getString("path");
+		String fileName = intent.getExtras().getString("fileName");
+
+		s = path + fileName;
+		transformer = new RealDoubleFFT(blockSize);
+		
+		((TextView) findViewById(R.id.songname)).setBackgroundColor(Color.parseColor("#ffdab9"));
+		((TextView) findViewById(R.id.songname)).setText(fileName);
+		// ImageView 및 관련 객체 설정 부분
+		imageView = (ImageView) findViewById(R.id.ImageView01);
+		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
+		canvas = new Canvas(bitmap);
+		paint = new Paint();
+		paint.setColor(Color.GREEN);
+		imageView.setImageBitmap(bitmap);
 		
 		/******************************* 블루투스 **************************/
 
@@ -164,147 +199,9 @@ public class AudioStreamPlayer extends Activity
 		});
 
 		/***********************************************************************/
-
-		mPlayButton = (Button) this.findViewById(R.id.button_play);
-		mPlayButton.setOnClickListener(this);
-		mStopButton = (Button) this.findViewById(R.id.button_stop);
-		mStopButton.setOnClickListener(this);
-
-		mTextCurrentTime = (TextView) findViewById(R.id.text_pos);
-		mTextDuration = (TextView) findViewById(R.id.text_duration);
-
-		mSeekProgress = (SeekBar) findViewById(R.id.seek_progress);
-		mSeekProgress.setOnSeekBarChangeListener(this);
-		mSeekProgress.setMax(0);
-		mSeekProgress.setProgress(0);
-
-		updatePlayer(State.Stopped);
-
-		Intent intent = getIntent();
-		String path = intent.getExtras().getString("path");
-		String fileName = intent.getExtras().getString("fileName");
-
-		s = path + fileName;
-		transformer = new RealDoubleFFT(blockSize);
-		
-		((TextView) findViewById(R.id.songname)).setBackgroundColor(Color.parseColor("#ffdab9"));
-		((TextView) findViewById(R.id.songname)).setText(fileName);
-		// ImageView 및 관련 객체 설정 부분
-		imageView = (ImageView) findViewById(R.id.ImageView01);
-		bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
-		canvas = new Canvas(bitmap);
-		paint = new Paint();
-		paint.setColor(Color.GREEN);
-		imageView.setImageBitmap(bitmap);
 	}
 
-	/***************** 블루투스 **************************************************/
-	/** Thread used to connect to a specified Bluetooth Device */
-	public class ConnectThread extends Thread {
-		private String address;
-		private boolean connectionStatus;
-
-		ConnectThread(String MACaddress) {
-			address = MACaddress;
-			connectionStatus = true;
-		}
-
-		public void run() {
-			// When this returns, it will 'know' about the server,
-			// via it's MAC address.
-			try {
-				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-
-				// We need two things before we can successfully connect
-				// (authentication issues aside): a MAC address, which we
-				// already have, and an RFCOMM channel.
-				// Because RFCOMM channels (aka ports) are limited in
-				// number, Android doesn't allow you to use them directly;
-				// instead you request a RFCOMM mapping based on a service
-				// ID. In our case, we will use the well-known SPP Service
-				// ID. This ID is in UUID (GUID to you Microsofties)
-				// format. Given the UUID, Android will handle the
-				// mapping for you. Generally, this will return RFCOMM 1,
-				// but not always; it depends what other BlueTooth services
-				// are in use on your Android device.
-				try {
-					btSocket = device.createRfcommSocketToServiceRecord(SPP_UUID);
-				} catch (IOException e) {
-					connectionStatus = false;
-				}
-			} catch (IllegalArgumentException e) {
-				connectionStatus = false;
-			}
-
-			// Discovery may be going on, e.g., if you're running a
-			// 'scan for devices' search from your handset's Bluetooth
-			// settings, so we call cancelDiscovery(). It doesn't hurt
-			// to call it, but it might hurt not to... discovery is a
-			// heavyweight process; you don't want it in progress when
-			// a connection attempt is made.
-			mBluetoothAdapter.cancelDiscovery();
-
-			// Blocking connect, for a simple client nothing else can
-			// happen until a successful connection is made, so we
-			// don't care if it blocks.
-			try {
-				btSocket.connect();
-			} catch (IOException e1) {
-				try {
-					btSocket.close();
-				} catch (IOException e2) {
-				}
-			}
-
-			// Create a data stream so we can talk to server.
-			try {
-				outStream = btSocket.getOutputStream();
-			} catch (IOException e2) {
-				connectionStatus = false;
-			}
-
-			// Send final result
-			if (connectionStatus) {
-				mHandler.sendEmptyMessage(1);
-			} else {
-				mHandler.sendEmptyMessage(0);
-			}
-		}
-	}
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-		case REQUEST_CONNECT_DEVICE:
-			// When DeviceListActivity returns with a device to connect
-			if (resultCode == Activity.RESULT_OK) {
-				// Show please wait dialog
-				myProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.pleaseWait),
-						getResources().getString(R.string.makingConnectionString), true);
-
-				// Get the device MAC address
-				deviceAddress = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-				// Connect to device with specified MAC address
-				mConnectThread = new ConnectThread(deviceAddress);
-				mConnectThread.start();
-
-			} else {
-				// Failure retrieving MAC address
-				Toast.makeText(this, R.string.macFailed, Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case REQUEST_ENABLE_BT:
-			// When the request to enable Bluetooth returns
-			if (resultCode == Activity.RESULT_OK) {
-				// Bluetooth is now enabled
-			} else {
-				// User did not enable Bluetooth or an error occured
-				Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-				finish();
-			}
-		}
-	}
-
-	/****************************************************************/
+	
 	public void setOnAudioStreamInterface(OnAudioStreamInterface listener) {
 		this.mListener = listener;
 	}
@@ -507,8 +404,10 @@ public class AudioStreamPlayer extends Activity
 				abc = toByteArray(toTransform);
 
 				xxx[1] = abc[50];
-				xxx[3] = abc[110];
-				xxx[5] = abc[170];
+				xxx[3] = abc[80];
+				xxx[5] = abc[110];
+				xxx[7]= abc[140];
+				//xxx[9]=abc[170];
 
 				if (xxx[1] == 0) {
 					xxx[0] = 0;
@@ -527,10 +426,22 @@ public class AudioStreamPlayer extends Activity
 				} else {
 					xxx[4] = 'C';
 				}
+				
+				if (xxx[7] == 0) {
+					xxx[6] = 0;
+				} else {
+					xxx[6] = 'D';
+				}
+				
+				/*if (xxx[9] == 0) {
+					xxx[8] = 0;
+				} else {
+					xxx[8] = 'E';
+				}*/
 
-				xxx[6] = '/';
+				xxx[8] = '/';
 
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < 9; i++) {
 					write(xxx[i]);
 				}
 
@@ -828,6 +739,130 @@ public class AudioStreamPlayer extends Activity
 		}
 	}
 
+	
+
+	public static byte[] toByteArray(double[] s) {
+		byte[] byteArray = new byte[s.length];
+		double a;
+		byte b;
+		for (int i = 0; i < byteArray.length; i++) {
+			a = s[i] * 100;
+			b = (byte) a;
+			byteArray[i] = b;
+		}
+
+		return byteArray;
+	}
+
+	
+	/***************** 블루투스 **************************************************/
+	/** Thread used to connect to a specified Bluetooth Device */
+	public class ConnectThread extends Thread {
+		private String address;
+		private boolean connectionStatus;
+
+		ConnectThread(String MACaddress) {
+			address = MACaddress;
+			connectionStatus = true;
+		}
+
+		public void run() {
+			// When this returns, it will 'know' about the server,
+			// via it's MAC address.
+			try {
+				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
+				// We need two things before we can successfully connect
+				// (authentication issues aside): a MAC address, which we
+				// already have, and an RFCOMM channel.
+				// Because RFCOMM channels (aka ports) are limited in
+				// number, Android doesn't allow you to use them directly;
+				// instead you request a RFCOMM mapping based on a service
+				// ID. In our case, we will use the well-known SPP Service
+				// ID. This ID is in UUID (GUID to you Microsofties)
+				// format. Given the UUID, Android will handle the
+				// mapping for you. Generally, this will return RFCOMM 1,
+				// but not always; it depends what other BlueTooth services
+				// are in use on your Android device.
+				try {
+					btSocket = device.createRfcommSocketToServiceRecord(SPP_UUID);
+				} catch (IOException e) {
+					connectionStatus = false;
+				}
+			} catch (IllegalArgumentException e) {
+				connectionStatus = false;
+			}
+
+			// Discovery may be going on, e.g., if you're running a
+			// 'scan for devices' search from your handset's Bluetooth
+			// settings, so we call cancelDiscovery(). It doesn't hurt
+			// to call it, but it might hurt not to... discovery is a
+			// heavyweight process; you don't want it in progress when
+			// a connection attempt is made.
+			mBluetoothAdapter.cancelDiscovery();
+
+			// Blocking connect, for a simple client nothing else can
+			// happen until a successful connection is made, so we
+			// don't care if it blocks.
+			try {
+				btSocket.connect();
+			} catch (IOException e1) {
+				try {
+					btSocket.close();
+				} catch (IOException e2) {
+				}
+			}
+
+			// Create a data stream so we can talk to server.
+			try {
+				outStream = btSocket.getOutputStream();
+			} catch (IOException e2) {
+				connectionStatus = false;
+			}
+
+			// Send final result
+			if (connectionStatus) {
+				mHandler.sendEmptyMessage(1);
+			} else {
+				mHandler.sendEmptyMessage(0);
+			}
+		}
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case REQUEST_CONNECT_DEVICE:
+			// When DeviceListActivity returns with a device to connect
+			if (resultCode == Activity.RESULT_OK) {
+				// Show please wait dialog
+				myProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.pleaseWait),
+						getResources().getString(R.string.makingConnectionString), true);
+
+				// Get the device MAC address
+				deviceAddress = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+				// Connect to device with specified MAC address
+				mConnectThread = new ConnectThread(deviceAddress);
+				mConnectThread.start();
+
+			} else {
+				// Failure retrieving MAC address
+				Toast.makeText(this, R.string.macFailed, Toast.LENGTH_SHORT).show();
+			}
+			break;
+		case REQUEST_ENABLE_BT:
+			// When the request to enable Bluetooth returns
+			if (resultCode == Activity.RESULT_OK) {
+				// Bluetooth is now enabled
+			} else {
+				// User did not enable Bluetooth or an error occured
+				Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		}
+	}
+
+	/****************************************************************/
+	
 	/******************** 블루투스 ******************************************/
 	public void write(byte cc) {
 		if (outStream != null) {
@@ -863,19 +898,6 @@ public class AudioStreamPlayer extends Activity
 			} catch (IOException e) {
 			}
 		}
-	}
-
-	public static byte[] toByteArray(double[] s) {
-		byte[] byteArray = new byte[s.length];
-		double a;
-		byte b;
-		for (int i = 0; i < byteArray.length; i++) {
-			a = s[i] * 100;
-			b = (byte) a;
-			byteArray[i] = b;
-		}
-
-		return byteArray;
 	}
 
 }

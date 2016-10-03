@@ -4,11 +4,15 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    
+  
+    
     <Button
         android:id="@+id/explorer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="FileListener"
         android:text="파일 목록" />
+    
 
 </LinearLayout>
