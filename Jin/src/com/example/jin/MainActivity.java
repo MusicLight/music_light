@@ -223,6 +223,7 @@ public class MainActivity extends Activity {
          }
       }
    }
+   
 
    public static void emptyOutStream() {
       if (outStream != null) {

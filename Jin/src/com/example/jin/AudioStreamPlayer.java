@@ -63,17 +63,17 @@ public class AudioStreamPlayer extends Activity
    public ProgressDialog mProgressDialog = null;
 
    String path, fileName, s;
-   int frequency = 8000;
+   int frequency = 3600;
    int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
    int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
    private RealDoubleFFT transformer;
-   int blockSize = 256;
+   static int blockSize = 300;
    ImageView imageView;
    Bitmap bitmap;
    Canvas canvas;
    Paint paint;
 
-   byte[] xxx = new byte[9];
+   byte[] xxx = new byte[25];
    byte[] abc = new byte[blockSize];
 
    double[] toTransform = new double[blockSize];
@@ -113,7 +113,7 @@ public class AudioStreamPlayer extends Activity
       ((TextView) findViewById(R.id.songname)).setText(fileName);
       // ImageView 및 관련 객체 설정 부분
       imageView = (ImageView) findViewById(R.id.ImageView01);
-      bitmap = Bitmap.createBitmap((int) 256, (int) 100, Bitmap.Config.ARGB_8888);
+      bitmap = Bitmap.createBitmap((int) 300, (int) 100, Bitmap.Config.ARGB_8888);
       canvas = new Canvas(bitmap);
       paint = new Paint();
       paint.setColor(Color.GREEN);
@@ -322,48 +322,108 @@ public class AudioStreamPlayer extends Activity
             onProgressUpdate(toTransform);
             abc = toByteArray(toTransform);
 
-            xxx[1] = abc[40];
-            xxx[3] = abc[80];
-            xxx[5] = abc[120];
-            xxx[7] = abc[160];
-
-            if (xxx[1] == 0) {
-               xxx[0] = 0;
-            } else {
-               xxx[0] = 'A';
-            }
-
-            if (xxx[3] == 0) {
-               xxx[2] = 0;
-            } else {
-               xxx[2] = 'B';
-            }
-
-            if (xxx[5] == 0) {
-               xxx[4] = 0;
-            } else {
-               xxx[4] = 'C';
+            int a = 0;
+            byte sum=0, avg=0;
+            for(int i=1;i<24;i=i+2)
+            {
+            	for(int j=a;j<a+25;j++)
+            	{
+            		sum=(byte) (sum+abc[i]);
+            	}
+            	avg=(byte) (sum/25);
+            	a=a+25;
+            	xxx[i]=(byte) (avg+10);
+            	
             }
             
-            if (xxx[7] == 0) {
-               xxx[6] = 0;
-            } else {
-               xxx[6] = 'C';
+           
+            byte temp;
+            for(int i=1;i<24;i=i+2)
+            {
+            	if(xxx[i] == 0)
+            	{
+            		xxx[i-1]=0;
+            	}
+            	else
+            	{
+            			switch(i)
+            			{
+            			case 1:
+            				temp = 'A';
+            				xxx[i-1]=temp;
+            				break;
+            			case 3:
+            				temp = 'B';
+            				xxx[i-1]=temp;
+            				break;
+            			case 5:
+            				temp = 'C';
+            				xxx[i-1]=temp;
+            				break;
+            			case 7:
+            				temp = 'D';
+            				xxx[i-1]=temp;
+            				break;
+            			case 9:
+            				temp = 'E';
+            				xxx[i-1]=temp;
+            				break;
+            			case 11:
+            				temp = 'F';
+            				xxx[i-1]=temp;
+            				break;
+            			case 13:
+            				temp = 'G';
+            				xxx[i-1]=temp;
+            				break;
+            			case 15:
+            				temp = 'H';
+            				xxx[i-1]=temp;
+            				break;
+            			case 17:
+            				temp = 'I';
+            				xxx[i-1]=temp;
+            				break;
+            			case 19:
+            				temp = 'J';
+            				xxx[i-1]=temp;
+            				break;
+            			case 21:
+            				temp = 'K';
+            				xxx[i-1]=temp;
+            				break;
+            			case 23:
+            				temp = 'L';
+            				xxx[i-1]=temp;
+            				break;
+            			}
+            			
+            	}
             }
 
-            xxx[8] = '/';
 
-            for (int i = 0; i < 9; i++) {
-               MainActivity.write(xxx[i]);
-               
-            }
+            xxx[24] = '/';
+
             
+            MainActivity.write(xxx[4]);
+            MainActivity.write(xxx[5]);
+            MainActivity.write(xxx[12]);
+            MainActivity.write(xxx[13]);
+            MainActivity.write(xxx[18]);
+            MainActivity.write(xxx[19]);
+            MainActivity.write(xxx[24]);
+            
+            /*MainActivity.write(10);
+            MainActivity.write(0);
+            MainActivity.write(-10);
+            MainActivity.write(-20);
+            */
             MainActivity.emptyOutStream();
 
             if (chunk.length > 0) {
                mAudioTrack.write(chunk, 0, chunk.length);
 
-               for (int i = 0; i < 256; i++) {
+               for (int i = 0; i < 300; i++) {
                   toTransform[i] = (double) chunk[i] / 32768.0;
                }
 
@@ -656,17 +716,45 @@ public class AudioStreamPlayer extends Activity
 
    
 
-   public static byte[] toByteArray(double[] s) {
+   /*public static byte[] toByteArray(double[] s) {
       byte[] byteArray = new byte[s.length];
       double a;
       byte b;
       for (int i = 0; i < byteArray.length; i++) {
-         a = s[i] * 100;
+         a = s[i];
          b = (byte) a;
          byteArray[i] = b;
       }
 
       return byteArray;
+   }*/
+   
+   public static byte[] toByteArray(double[] s) {
+   byte[] byteArray = new byte[blockSize];
+   double a;
+   byte b;
+   for (int i = 0; i < blockSize; i++) {
+      a = Math.round(s[i]*100);
+      b = (byte) a;
+      byteArray[i] = b;
    }
+
+   return byteArray;
+}
+   public byte AVG(int a, int b,byte arr[])
+   {
+	   int sum=0;
+	   byte avg=0;
+	   for(int i=a;i<b;i++)
+	   {
+		   sum=sum+arr[i];
+	   }
+	   avg=(byte)(sum/25);
+	  
+	   return avg;
+	   
+   }
+
+   
 
 }
