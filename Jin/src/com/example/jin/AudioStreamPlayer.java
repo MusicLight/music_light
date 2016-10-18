@@ -332,7 +332,7 @@ public class AudioStreamPlayer extends Activity
             	}
             	avg=(byte) (sum/25);
             	a=a+25;
-            	xxx[i]=(byte) (avg+10);
+            	xxx[i]=avg;
             	
             }
             

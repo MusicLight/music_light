@@ -146,10 +146,7 @@ public class FileList extends ListView {
 		return result;
 	}
 
-	/**
-	 * int position을 따로 추가하였습니다 그 이유는 폴더 이름이 뒤로가기일경우 뒤로가기 처리가 되기 때문에 맨위에 있는
-	 * 뒤로가기(position은 0)일때만 상단 폴더로 넘어가도록 처리하였습니다
-	 */
+	
 	private String getRealPathName(String newPath, int position) {
 		String path = newPath.substring(1, newPath.length() - 1);
 		if (path.matches("뒤로가기") && position == 0) {
@@ -169,9 +166,7 @@ public class FileList extends ListView {
 				if (_OnFileSelectedListener != null)
 					_OnFileSelectedListener.onSelected(_Path, fileName);
 			}
-			/**
-			 * 파일/폴더를 선택할경우 두번눌러 어플 종료 카운터를 초기화 합니다
-			 */
+			
 			FileExplorer.kill = 0;
 		}
 	};

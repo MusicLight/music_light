@@ -22,17 +22,17 @@ public class FileExplorer extends Activity {
 		_FileList.setOnPathChangedListener(new OnPathChangedListener() {
 			@Override
 			public void onChanged(String path) {
-				// TODO Auto-generated method stub
-				((TextView) findViewById(R.id.FilePath)).setText("경로 : " + path);
+				
+				((TextView) findViewById(R.id.FilePath)).setText("��� : " + path);
 			}
 		});
 
 		_FileList.setOnFileSelected(new OnFileSelectedListener() {
 			@Override
 			public void onSelected(String path, String fileName) {
-				// TODO Auto-generated method stub
-				((TextView) findViewById(R.id.FilePath)).setText("경로 : " + path);
-				Intent intent = new Intent(getApplicationContext(), Play.class);
+				
+				((TextView) findViewById(R.id.FilePath)).setText("��� : " + path);
+				Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 				intent.putExtra("path", path);
 				intent.putExtra("fileName", fileName);
 				startActivity(intent);
@@ -49,7 +49,7 @@ public class FileExplorer extends Activity {
 	}
 
 	public void Listener(View target) {
-		Intent intent = new Intent(getApplicationContext(), Play.class);
+		Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 		startActivity(intent);
 	}
 }
