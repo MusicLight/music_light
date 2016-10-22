@@ -409,30 +409,19 @@ public class AudioStreamPlayer extends Activity
 
             xxx[24] = '/';
 
-            byte[] www = new byte[7];
-            www[0]=xxx[4];
-            www[1]=xxx[5];
-            www[2] =xxx[12];
-            www[3]=xxx[13];
-            www[4]=xxx[18];
-            www[5]=xxx[19];
-            www[6]=xxx[24];
-            MainActivity.write(www);
-            /*
+          
+           
             MainActivity.write(xxx[4]);
             MainActivity.write(xxx[5]);
             MainActivity.write(xxx[12]);
             MainActivity.write(xxx[13]);
             MainActivity.write(xxx[18]);
             MainActivity.write(xxx[19]);
-            MainActivity.write(xxx[24]);*/
+           // MainActivity.write(xxx[22]);
+           // MainActivity.write(xxx[23]);
+            MainActivity.write(xxx[24]);
             
             
-            /*MainActivity.write(10);
-            MainActivity.write(0);
-            MainActivity.write(-10);
-            MainActivity.write(-20);
-            */
             MainActivity.emptyOutStream();
 
             if (chunk.length > 0) {

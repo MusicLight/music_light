@@ -214,7 +214,7 @@ public class MainActivity extends Activity {
    /****************************************************************/
    
    /******************** 블루투스 ******************************************/
-   public static void write(byte[] cc) {
+   public static void write(byte cc) {
       if (outStream != null) {
          try {
 
