@@ -409,17 +409,11 @@ public class AudioStreamPlayer extends Activity
 
             xxx[24] = '/';
 
+            for(int i=0;i<25;i++)
+            {
+            	MainActivity.write(xxx[i]);
+            }
           
-           
-            MainActivity.write(xxx[4]);
-            MainActivity.write(xxx[5]);
-            MainActivity.write(xxx[12]);
-            MainActivity.write(xxx[13]);
-            MainActivity.write(xxx[18]);
-            MainActivity.write(xxx[19]);
-           // MainActivity.write(xxx[22]);
-           // MainActivity.write(xxx[23]);
-            MainActivity.write(xxx[24]);
             
             
             MainActivity.emptyOutStream();

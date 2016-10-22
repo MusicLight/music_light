@@ -23,7 +23,7 @@ public class FileExplorer extends Activity {
 			@Override
 			public void onChanged(String path) {
 				
-				((TextView) findViewById(R.id.FilePath)).setText("��� : " + path);
+				((TextView) findViewById(R.id.FilePath)).setText("경로: " + path);
 			}
 		});
 
@@ -31,7 +31,7 @@ public class FileExplorer extends Activity {
 			@Override
 			public void onSelected(String path, String fileName) {
 				
-				((TextView) findViewById(R.id.FilePath)).setText("��� : " + path);
+				((TextView) findViewById(R.id.FilePath)).setText("경로 : " + path);
 				Intent intent = new Intent(getApplicationContext(), AudioStreamPlayer.class);
 				intent.putExtra("path", path);
 				intent.putExtra("fileName", fileName);
