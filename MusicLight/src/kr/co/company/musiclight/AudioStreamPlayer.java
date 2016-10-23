@@ -60,7 +60,56 @@ public class AudioStreamPlayer extends Activity
 
    public SeekBar mSeekProgress = null;
 
-   public ProgressDialog mProgressDialog = null;
+   public ProgressDialog mProgressDialog = null;   
+   
+   ImageView b1 = (ImageView)findViewById(R.id.circle1);
+   ImageView b2 = (ImageView)findViewById(R.id.circle2);
+   ImageView b3 = (ImageView)findViewById(R.id.circle3);
+   ImageView b4 = (ImageView)findViewById(R.id.circle4);
+   ImageView b5 = (ImageView)findViewById(R.id.circle5);
+   ImageView b6 = (ImageView)findViewById(R.id.circle6);
+   ImageView b7 = (ImageView)findViewById(R.id.circle7);
+   ImageView b8 = (ImageView)findViewById(R.id.circle8);
+   ImageView b9 = (ImageView)findViewById(R.id.circle9);
+   ImageView b10 = (ImageView)findViewById(R.id.circle10);
+   ImageView b11 = (ImageView)findViewById(R.id.circle11);
+   ImageView b12 = (ImageView)findViewById(R.id.circle12);
+   ImageView b13 = (ImageView)findViewById(R.id.circle13);
+   ImageView b14 = (ImageView)findViewById(R.id.circle14);
+   ImageView b15 = (ImageView)findViewById(R.id.circle15);
+   ImageView b16 = (ImageView)findViewById(R.id.circle16);
+   ImageView b17 = (ImageView)findViewById(R.id.circle17);
+   ImageView b18 = (ImageView)findViewById(R.id.circle18);
+   ImageView b19 = (ImageView)findViewById(R.id.circle19);
+   ImageView b20 = (ImageView)findViewById(R.id.circle20);
+   ImageView b21 = (ImageView)findViewById(R.id.circle21);
+   ImageView b22 = (ImageView)findViewById(R.id.circle22);
+   ImageView b23 = (ImageView)findViewById(R.id.circle23);
+   ImageView b24 = (ImageView)findViewById(R.id.circle24);
+   ImageView b25 = (ImageView)findViewById(R.id.circle25);
+   ImageView b26 = (ImageView)findViewById(R.id.circle26);
+   ImageView b27 = (ImageView)findViewById(R.id.circle27);
+   ImageView b28 = (ImageView)findViewById(R.id.circle28);
+   ImageView b29 = (ImageView)findViewById(R.id.circle29);
+   ImageView b30 = (ImageView)findViewById(R.id.circle30);
+   ImageView b31 = (ImageView)findViewById(R.id.circle31);
+   ImageView b32 = (ImageView)findViewById(R.id.circle32);
+   ImageView b33 = (ImageView)findViewById(R.id.circle33);
+   ImageView b34 = (ImageView)findViewById(R.id.circle34);
+   ImageView b35 = (ImageView)findViewById(R.id.circle35);
+   ImageView b36 = (ImageView)findViewById(R.id.circle36);
+   ImageView b37 = (ImageView)findViewById(R.id.circle37);
+   ImageView b38 = (ImageView)findViewById(R.id.circle38);
+   ImageView b39 = (ImageView)findViewById(R.id.circle39);
+   ImageView b40 = (ImageView)findViewById(R.id.circle40);
+   ImageView b41 = (ImageView)findViewById(R.id.circle41);
+   ImageView b42 = (ImageView)findViewById(R.id.circle42);
+   ImageView b43 = (ImageView)findViewById(R.id.circle43);
+   ImageView b44 = (ImageView)findViewById(R.id.circle44);
+   ImageView b45 = (ImageView)findViewById(R.id.circle45);
+   ImageView b46 = (ImageView)findViewById(R.id.circle46);
+   ImageView b47 = (ImageView)findViewById(R.id.circle47);
+   ImageView b48 = (ImageView)findViewById(R.id.circle48);
 
    String path, fileName, s;
    int frequency = 3600;
@@ -408,6 +457,18 @@ public class AudioStreamPlayer extends Activity
 
 
             xxx[24] = '/';
+            
+            if(xxx[1]<64)
+            	b37.setBackgroundColor(Color.rgb(255,255, 0));
+            else if(xxx[1]>=64 && xxx[1]<128)
+            	b23.setBackgroundColor(Color.rgb(255,0, 0));
+            else if(xxx[1]>=128 && xxx[1]<192)
+            	b13.setBackgroundColor(Color.rgb(128,0, 0));
+            else 
+            	b13.setBackgroundColor(Color.rgb(0,0,255));
+            		
+            		
+           
 
             for(int i=0;i<25;i++)
             {
