@@ -220,7 +220,7 @@ public class AudioStreamPlayer extends Activity
 	public void decodeLoop() {
 		ByteBuffer[] codecInputBuffers;
 		ByteBuffer[] codecOutputBuffers;
-
+		
 		mExtractor = new MediaExtractor();
 		try {
 			mExtractor.setDataSource(s);
@@ -410,6 +410,8 @@ public class AudioStreamPlayer extends Activity
 
 				xxx[24] = '/';
 
+				
+
 				/*
 				 * if(xxx[1]<64) b37.setBackgroundColor(Color.rgb(255,255, 0));
 				 * else if(xxx[1]>=64 && xxx[1]<128)
@@ -418,6 +420,8 @@ public class AudioStreamPlayer extends Activity
 				 * b13.setBackgroundColor(Color.rgb(128,0, 0)); else
 				 * b13.setBackgroundColor(Color.rgb(0,0,255));
 				 */
+				
+				
 
 				for (int i = 0; i < 25; i++) {
 					MainActivity.write(xxx[i]);
