@@ -23,6 +23,7 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -74,9 +75,11 @@ public class AudioStreamPlayer extends Activity
 	Bitmap bitmap;
 	Canvas canvas;
 	Paint paint;
+	final Handler han = new Handler();
 
 	byte[] xxx = new byte[25];
 	byte[] abc = new byte[blockSize];
+	byte[] aa = new byte[13];
 
 	double[] toTransform = new double[blockSize];
 
@@ -163,14 +166,16 @@ public class AudioStreamPlayer extends Activity
 			@Override
 			public void run() {
 				decodeLoop();
+				
 			}
+			
+
 		}).start();
 	}
 
 	public DelegateHandler mAudioPlayerHandler = new DelegateHandler();
 
 	class DelegateHandler extends Handler {
-		@Override
 		public void handleMessage(Message msg) {
 		}
 
@@ -220,7 +225,7 @@ public class AudioStreamPlayer extends Activity
 	public void decodeLoop() {
 		ByteBuffer[] codecInputBuffers;
 		ByteBuffer[] codecOutputBuffers;
-		
+
 		mExtractor = new MediaExtractor();
 		try {
 			mExtractor.setDataSource(s);
@@ -348,6 +353,7 @@ public class AudioStreamPlayer extends Activity
 					xxx[i] = (byte) avg;
 
 				}
+				
 
 				byte temp;
 				for (int i = 1; i < 24; i = i + 2) {
@@ -409,6 +415,8 @@ public class AudioStreamPlayer extends Activity
 				}
 
 				xxx[24] = '/';
+				
+				UIChange(xxx);
 
 				
 
@@ -420,8 +428,6 @@ public class AudioStreamPlayer extends Activity
 				 * b13.setBackgroundColor(Color.rgb(128,0, 0)); else
 				 * b13.setBackgroundColor(Color.rgb(0,0,255));
 				 */
-				
-				
 
 				for (int i = 0; i < 25; i++) {
 					MainActivity.write(xxx[i]);
@@ -468,6 +474,8 @@ public class AudioStreamPlayer extends Activity
 			mAudioPlayerHandler.onAudioPlayerStop(AudioStreamPlayer.this);
 		}
 	}
+
+	
 
 	public void release() {
 		stop();
@@ -682,6 +690,124 @@ public class AudioStreamPlayer extends Activity
 		int progress = seekBar.getProgress();
 
 		this.seekTo(progress);
+	}
+	public void UIChange(final byte[] xxx) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (xxx[1] < -2)
+					b1.setImageResource(R.drawable.yellow);
+				else if (xxx[1] >= -2 && xxx[1] < 1)
+					b1.setImageResource(R.drawable.red);
+				else if (xxx[1] >=1 && xxx[1] < 4)
+					b1.setImageResource(R.drawable.green);
+				else
+					b1.setImageResource(R.drawable.blue);
+				
+				if (xxx[3] < -2)
+					b2.setImageResource(R.drawable.yellow);
+				else if (xxx[3] >=-2 && xxx[3] < 1)
+					b2.setImageResource(R.drawable.red);
+				else if (xxx[3] >=1 && xxx[3] < 4)
+					b2.setImageResource(R.drawable.green);
+				else
+					b2.setImageResource(R.drawable.blue);
+				
+				if (xxx[5] < -2)
+					b3.setImageResource(R.drawable.yellow);
+				else if (xxx[5] >= -2 && xxx[5] < 1)
+					b3.setImageResource(R.drawable.red);
+				else if (xxx[5] >=1 && xxx[5] < 4)
+					b3.setImageResource(R.drawable.green);
+				else
+					b3.setImageResource(R.drawable.blue);
+				
+				if (xxx[7] < -2)
+					b4.setImageResource(R.drawable.yellow);
+				else if (xxx[7] >= -2 && xxx[7] < 1)
+					b4.setImageResource(R.drawable.red);
+				else if (xxx[7] >=1 && xxx[7] < 4)
+					b4.setImageResource(R.drawable.green);
+				else
+					b4.setImageResource(R.drawable.blue);
+				
+				if (xxx[9] <-2)
+					b5.setImageResource(R.drawable.yellow);
+				else if (xxx[9] >= -2 && xxx[9] < 1)
+					b5.setImageResource(R.drawable.red);
+				else if (xxx[9] >=1 && xxx[9] <4)
+					b5.setImageResource(R.drawable.green);
+				else
+					b5.setImageResource(R.drawable.blue);
+				
+				if (xxx[11] < -2)
+					b6.setImageResource(R.drawable.yellow);
+				else if (xxx[11] >= -2 && xxx[11] < 1)
+					b6.setImageResource(R.drawable.red);
+				else if (xxx[11] >=1 && xxx[11] < 4)
+					b6.setImageResource(R.drawable.green);
+				else
+					b6.setImageResource(R.drawable.blue);
+				
+				if (xxx[13] < -2)
+					b7.setImageResource(R.drawable.yellow);
+				else if (xxx[13] >= -2 && xxx[13] < 1)
+					b7.setImageResource(R.drawable.red);
+				else if (xxx[13] >=1 && xxx[13] < 4)
+					b7.setImageResource(R.drawable.green);
+				else
+					b7.setImageResource(R.drawable.blue);
+				
+				if (xxx[15] < -2)
+					b8.setImageResource(R.drawable.yellow);
+				else if (xxx[15] >= -2 && xxx[15] <1)
+					b8.setImageResource(R.drawable.red);
+				else if (xxx[15] >=1 && xxx[15] < 4)
+					b8.setImageResource(R.drawable.green);
+				else
+					b8.setImageResource(R.drawable.blue);
+				
+				if (xxx[17] <-2)
+					b9.setImageResource(R.drawable.yellow);
+				else if (xxx[17] >= -2 && xxx[17] < 1)
+					b9.setImageResource(R.drawable.red);
+				else if (xxx[17] >=1&& xxx[17] < 4)
+					b9.setImageResource(R.drawable.green);
+				else
+					b9.setImageResource(R.drawable.blue);
+				
+				if (xxx[19] <-2)
+					b10.setImageResource(R.drawable.yellow);
+				else if (xxx[19] >= -2&& xxx[19] <1)
+					b10.setImageResource(R.drawable.red);
+				else if (xxx[19] >=1 && xxx[19] < 4)
+					b10.setImageResource(R.drawable.green);
+				else
+					b10.setImageResource(R.drawable.blue);
+				
+				if (xxx[21] <-2)
+					b11.setImageResource(R.drawable.yellow);
+				else if (xxx[21] >= -2&& xxx[21] < 1)
+					b11.setImageResource(R.drawable.red);
+				else if (xxx[21] >=1 && xxx[21] < 4)
+					b11.setImageResource(R.drawable.green);
+				else
+					b11.setImageResource(R.drawable.blue);
+				
+				if (xxx[23] < -2)
+					b12.setImageResource(R.drawable.yellow);
+				else if (xxx[23] >= -2 && xxx[23] < 1)
+					b12.setImageResource(R.drawable.red);
+				else if (xxx[23] >=1 && xxx[23] < 4)
+					b12.setImageResource(R.drawable.green);
+				else
+					b12.setImageResource(R.drawable.blue);
+
+				
+
+			}
+		});
+
 	}
 
 	public void onProgressUpdate(double[]... toTransform) {
