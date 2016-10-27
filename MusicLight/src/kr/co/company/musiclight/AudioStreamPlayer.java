@@ -1,15 +1,10 @@
 package kr.co.company.musiclight;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,7 +18,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AudioStreamPlayer extends Activity
 		implements OnAudioStreamInterface, OnSeekBarChangeListener, OnClickListener
@@ -53,8 +46,9 @@ public class AudioStreamPlayer extends Activity
 
 	public OnAudioStreamInterface mListener = null;
 
-	public Button mPlayButton = null;
-	public Button mStopButton = null;
+	public ImageView mPlayButton = null;
+	public ImageView mStopButton = null;
+	public ImageView mPauseButton = null;
 
 	public TextView mTextCurrentTime = null;
 	public TextView mTextDuration = null;
@@ -88,10 +82,11 @@ public class AudioStreamPlayer extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
 
-		mPlayButton = (Button) this.findViewById(R.id.button_play);
+		mPlayButton = (ImageView) this.findViewById(R.id.button_play);
 		mPlayButton.setOnClickListener(this);
-		mStopButton = (Button) this.findViewById(R.id.button_stop);
+		mStopButton = (ImageView) this.findViewById(R.id.button_stop);
 		mStopButton.setOnClickListener(this);
+		mPauseButton = (ImageView) this.findViewById(R.drawable.pause);
 
 		mTextCurrentTime = (TextView) findViewById(R.id.text_pos);
 		mTextDuration = (TextView) findViewById(R.id.text_duration);
@@ -541,7 +536,7 @@ public class AudioStreamPlayer extends Activity
 				mProgressDialog = null;
 			}
 			mPlayButton.setSelected(false);
-			mPlayButton.setText("Play");
+		//	mPlayButton.setText("Play");
 
 			mTextCurrentTime.setText("00:00");
 			mTextDuration.setText("00:00");
@@ -559,13 +554,14 @@ public class AudioStreamPlayer extends Activity
 			mProgressDialog.show();
 
 			mPlayButton.setSelected(false);
-			mPlayButton.setText("Play");
+		//	mPlayButton.setText("Play");
 
 			mTextCurrentTime.setText("00:00");
 			mTextDuration.setText("00:00");
 			break;
 		}
 		case Pause: {
+
 			break;
 		}
 		case Playing: {
@@ -576,7 +572,9 @@ public class AudioStreamPlayer extends Activity
 				mProgressDialog = null;
 			}
 			mPlayButton.setSelected(true);
-			mPlayButton.setText("Pause");
+		//	mPlayButton.setText("Pause");
+			mPlayButton.setImageResource(R.drawable.pause);
+
 			break;
 		}
 		}
@@ -669,7 +667,8 @@ public class AudioStreamPlayer extends Activity
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				mPlayButton.setText("Play");
+		//		mPlayButton.setText("Play");
+				mPlayButton.setImageResource(R.drawable.play);
 			}
 		});
 	}

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+ >
 
     <TextView
         android:id="@+id/songname"
@@ -28,7 +29,7 @@
             android:id="@+id/circle1"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"        />
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle2"
@@ -52,49 +53,49 @@
             android:id="@+id/circle5"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle6"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle7"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle8"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle9"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle10"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle11"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
 
         <ImageView
             android:id="@+id/circle12"
             android:layout_width="26dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bulb"/>
+            android:src="@drawable/bulb" />
     </LinearLayout>
 
     <RelativeLayout
@@ -134,19 +135,17 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageView
             android:id="@+id/button_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Play" />
+            android:src="@drawable/play" />
 
-        <Button
+        <ImageView
             android:id="@+id/button_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Stop" />
+            android:src="@drawable/stop" />
     </LinearLayout>
 
 </LinearLayout>
