@@ -21,6 +21,6 @@ public class IntroActivity extends Activity {
                 // 뒤로가기 했을경우 안나오도록 없애주기 >> finish!!
                 finish();
             }
-        }, 800);   
+        }, 1500);   
     }
 }

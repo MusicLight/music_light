@@ -2,15 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:gravity="center"
-    android:orientation="vertical"
- >
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="♬"
+        android:textColor="#F08080"
+        android:textSize="38sp" />
 
     <TextView
         android:id="@+id/songname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp" />
 
     <ImageView
         android:id="@+id/ImageView01"
@@ -125,13 +141,16 @@
         android:layout_above="@+id/layout_control"
         android:layout_marginBottom="10dip"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip" />
+        android:layout_marginRight="10dip"
+        android:maxHeight="1dip"
+        android:minHeight="1dip"
+        android:progressDrawable="@drawable/seekbar"
+        android:thumb="@drawable/seekbarthumb" />
 
     <LinearLayout
         android:id="@+id/layout_control"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -141,11 +160,25 @@
             android:layout_height="wrap_content"
             android:src="@drawable/play" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="  "
+            android:textSize="38sp" />
+
         <ImageView
             android:id="@+id/button_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/stop" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="  "
+        android:textSize="15sp" />
 
 </LinearLayout>

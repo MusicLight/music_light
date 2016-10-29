@@ -22,7 +22,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -105,14 +104,14 @@ public class AudioStreamPlayer extends Activity
 		s = path + fileName;
 		transformer = new RealDoubleFFT(blockSize);
 
-		((TextView) findViewById(R.id.songname)).setBackgroundColor(Color.parseColor("#ffdab9"));
+		//((TextView) findViewById(R.id.songname)).setBackgroundColor(Color.parseColor("#ffdab9"));
 		((TextView) findViewById(R.id.songname)).setText(fileName);
 		// ImageView 및 관련 객체 설정 부분
 		imageView = (ImageView) findViewById(R.id.ImageView01);
 		bitmap = Bitmap.createBitmap((int) 300, (int) 100, Bitmap.Config.ARGB_8888);
 		canvas = new Canvas(bitmap);
 		paint = new Paint();
-		paint.setColor(Color.GREEN);
+		paint.setColor(Color.GRAY);
 		imageView.setImageBitmap(bitmap);
 
 		b1 = (ImageView) findViewById(R.id.circle1);

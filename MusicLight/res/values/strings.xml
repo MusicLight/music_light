@@ -3,8 +3,8 @@
 
     <string name="app_name">♥MusicLight♥</string>
      <string name="appVersion">1.1</string>
-    <string name="connected">Disconnect from device</string>
-    <string name="disconnected">Connect to a device</string>
+    <string name="connected"> Disconnect from device </string>
+    <string name="disconnected"> Connect to a device </string>
     <string name="no_bt_device">Bluetooth is not available.</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled.</string>
     <string name="macFailed">Error retrieving MAC address.</string>
