@@ -697,7 +697,7 @@ public class AudioStreamPlayer extends Activity
 			@Override
 			public void run() {
 				if (xxx[1] < 8)
-					b1.setImageResource(R.drawable.yellow);
+					b1.setImageResource(R.drawable.white);
 				else if (xxx[1] >= 8 && xxx[1] < 11)
 					b1.setImageResource(R.drawable.red);
 				else if (xxx[1] >=11 && xxx[1] < 14)
@@ -706,7 +706,7 @@ public class AudioStreamPlayer extends Activity
 					b1.setImageResource(R.drawable.blue);
 				
 				if (xxx[3] <8)
-					b2.setImageResource(R.drawable.yellow);
+					b2.setImageResource(R.drawable.white);
 				else if (xxx[3] >=8 && xxx[3] < 11)
 					b2.setImageResource(R.drawable.red);
 				else if (xxx[3] >=11 && xxx[3] < 14)
@@ -715,7 +715,7 @@ public class AudioStreamPlayer extends Activity
 					b2.setImageResource(R.drawable.blue);
 				
 				if (xxx[5] < 8)
-					b3.setImageResource(R.drawable.yellow);
+					b3.setImageResource(R.drawable.white);
 				else if (xxx[5] >= 8 && xxx[5] < 11)
 					b3.setImageResource(R.drawable.red);
 				else if (xxx[5] >=11 && xxx[5] < 14)
@@ -724,7 +724,7 @@ public class AudioStreamPlayer extends Activity
 					b3.setImageResource(R.drawable.blue);
 				
 				if (xxx[7] < 8)
-					b4.setImageResource(R.drawable.yellow);
+					b4.setImageResource(R.drawable.white);
 				else if (xxx[7] >= 8 && xxx[7] < 11)
 					b4.setImageResource(R.drawable.red);
 				else if (xxx[7] >=11 && xxx[7] < 14)
@@ -733,7 +733,7 @@ public class AudioStreamPlayer extends Activity
 					b4.setImageResource(R.drawable.blue);
 				
 				if (xxx[9] <8)
-					b5.setImageResource(R.drawable.yellow);
+					b5.setImageResource(R.drawable.white);
 				else if (xxx[9] >= 8 && xxx[9] < 11)
 					b5.setImageResource(R.drawable.red);
 				else if (xxx[9] >=11 && xxx[9] <14)
@@ -742,7 +742,7 @@ public class AudioStreamPlayer extends Activity
 					b5.setImageResource(R.drawable.blue);
 				
 				if (xxx[11] < 8)
-					b6.setImageResource(R.drawable.yellow);
+					b6.setImageResource(R.drawable.white);
 				else if (xxx[11] >= 8 && xxx[11] < 11)
 					b6.setImageResource(R.drawable.red);
 				else if (xxx[11] >=11 && xxx[11] < 14)
@@ -751,7 +751,7 @@ public class AudioStreamPlayer extends Activity
 					b6.setImageResource(R.drawable.blue);
 				
 				if (xxx[13] < 8)
-					b7.setImageResource(R.drawable.yellow);
+					b7.setImageResource(R.drawable.white);
 				else if (xxx[13] >= 8 && xxx[13] < 11)
 					b7.setImageResource(R.drawable.red);
 				else if (xxx[13] >=11 && xxx[13] < 14)
@@ -760,7 +760,7 @@ public class AudioStreamPlayer extends Activity
 					b7.setImageResource(R.drawable.blue);
 				
 				if (xxx[15] < 8)
-					b8.setImageResource(R.drawable.yellow);
+					b8.setImageResource(R.drawable.white);
 				else if (xxx[15] >= 8 && xxx[15] <11)
 					b8.setImageResource(R.drawable.red);
 				else if (xxx[15] >=11 && xxx[15] < 14)
@@ -769,7 +769,7 @@ public class AudioStreamPlayer extends Activity
 					b8.setImageResource(R.drawable.blue);
 				
 				if (xxx[17] <8)
-					b9.setImageResource(R.drawable.yellow);
+					b9.setImageResource(R.drawable.white);
 				else if (xxx[17] >= 8 && xxx[17] < 11)
 					b9.setImageResource(R.drawable.red);
 				else if (xxx[17] >=11&& xxx[17] < 14)
@@ -778,7 +778,7 @@ public class AudioStreamPlayer extends Activity
 					b9.setImageResource(R.drawable.blue);
 				
 				if (xxx[19] <8)
-					b10.setImageResource(R.drawable.yellow);
+					b10.setImageResource(R.drawable.white);
 				else if (xxx[19] >= 8&& xxx[19] <11)
 					b10.setImageResource(R.drawable.red);
 				else if (xxx[19] >=11 && xxx[19] < 14)
@@ -787,7 +787,7 @@ public class AudioStreamPlayer extends Activity
 					b10.setImageResource(R.drawable.blue);
 				
 				if (xxx[21] <8)
-					b11.setImageResource(R.drawable.yellow);
+					b11.setImageResource(R.drawable.white);
 				else if (xxx[21] >= 8&& xxx[21] < 11)
 					b11.setImageResource(R.drawable.red);
 				else if (xxx[21] >=11 && xxx[21] < 14)
@@ -796,7 +796,7 @@ public class AudioStreamPlayer extends Activity
 					b11.setImageResource(R.drawable.blue);
 				
 				if (xxx[23] < 8)
-					b12.setImageResource(R.drawable.yellow);
+					b12.setImageResource(R.drawable.white);
 				else if (xxx[23] >= 8 && xxx[23] < 11)
 					b12.setImageResource(R.drawable.red);
 				else if (xxx[23] >=11 && xxx[23] < 14)
