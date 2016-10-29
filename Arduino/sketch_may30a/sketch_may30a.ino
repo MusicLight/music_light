@@ -523,7 +523,7 @@ void trans() {
         {
           int ef = LEDarr[0];
           digitalWrite(latch, LOW);
-          shiftOut(data, clock, LSBFIRST, cd);
+          shiftOut(data, clock, LSBFIRST, ef);
           Serial.println("E/1/F/1 : ");
           Serial.println(array[4]);
           Serial.println(array[5]);
