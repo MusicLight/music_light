@@ -536,6 +536,7 @@ public class AudioStreamPlayer extends Activity
 			}
 			mPlayButton.setSelected(false);
 		//	mPlayButton.setText("Play");
+			mPlayButton.setImageResource(R.drawable.play);
 
 			mTextCurrentTime.setText("00:00");
 			mTextDuration.setText("00:00");
@@ -554,6 +555,7 @@ public class AudioStreamPlayer extends Activity
 
 			mPlayButton.setSelected(false);
 		//	mPlayButton.setText("Play");
+			mPlayButton.setImageResource(R.drawable.play);
 
 			mTextCurrentTime.setText("00:00");
 			mTextDuration.setText("00:00");
