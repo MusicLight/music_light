@@ -156,9 +156,9 @@ void trans() {
   /**************** 레지스터 1번 ****************/
   switch (array[0])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[1] < 8)
+        if (array[1] < 11)
         {
           int ab = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -167,7 +167,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else if ( array[1] >= 8 && array[1] < 11)
+        else if ( array[1] >= 11 && array[1] < 22)
         {
           int ab = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -177,7 +177,7 @@ void trans() {
           Serial.println(array[1]);
         }
 
-        else if ( array[1] >= 11 && array[1] < 14)
+        else if ( array[1] >= 22 && array[1] < 33)
         {
           int ab = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -186,7 +186,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else //if ( array[1] > 191 && array[1] <= 255)
+        else 
         {
           int ab = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -201,9 +201,9 @@ void trans() {
 
       break;
 
-    case  8 ... 10 :
+    case  11 ... 21 :
       {
-        if (array[1] < 8)
+        if (array[1] < 11)
         {
           int ab = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -212,7 +212,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else if ( array[1] >= 8 && array[1] < 11)
+        else if ( array[1] >= 11 && array[1] < 22)
         {
           int ab = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -222,7 +222,7 @@ void trans() {
           Serial.println(array[1]);
         }
 
-        else if ( array[1] >= 11 && array[1] < 14)
+        else if ( array[1] >= 22 && array[1] < 33)
         {
           int ab = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -231,7 +231,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else //if ( array[1] > 191 && array[1] <= 255)
+        else 
         {
           int ab = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -245,9 +245,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[1] < 8)
+        if (array[1] < 11)
         {
           int ab = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -256,7 +256,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else if ( array[1] >= 8 && array[1] < 11)
+        else if ( array[1] >= 11 && array[1] < 22)
         {
           int ab = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -266,7 +266,7 @@ void trans() {
           Serial.println(array[1]);
         }
 
-        else if ( array[1] >= 11 && array[1] < 14)
+        else if ( array[1] >= 22 && array[1] < 33)
         {
           int ab = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -275,7 +275,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else //if ( array[1] > 191 && array[1] <= 255)
+        else 
         {
           int ab = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -289,9 +289,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96:
       {
-        if (array[1] < 8)
+        if (array[1] < 11)
         {
           int ab = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -300,7 +300,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else if ( array[1] >= 8 && array[1] < 11)
+        else if ( array[1] >= 11 && array[1] < 22)
         {
           int ab = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -310,7 +310,7 @@ void trans() {
           Serial.println(array[1]);
         }
 
-        else if ( array[1] >= 11 && array[1] < 14)
+        else if ( array[1] >= 22 && array[1] < 33)
         {
           int ab = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -319,7 +319,7 @@ void trans() {
           Serial.println(array[0]);
           Serial.println(array[1]);
         }
-        else //if ( array[1] > 191 && array[1] <= 255)
+        else 
         {
           int ab = LEDarr[15];
           digitalWrite(latch, LOW);
@@ -337,9 +337,9 @@ void trans() {
   /**************** 레지스터 2번 ****************/
   switch (array[2])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[3] < 8)
+        if (array[3] < 11)
         {
           int cd = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -348,7 +348,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else if ( array[3] >= 8 && array[3] < 11)
+        else if ( array[3] >= 11 && array[3] < 22)
         {
           int cd = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -358,7 +358,7 @@ void trans() {
           Serial.println(array[3]);
         }
 
-        else if ( array[3] >= 11 && array[3] < 14)
+        else if ( array[3] >= 22 && array[3] < 33)
         {
           int cd = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -367,7 +367,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else
         {
           int cd = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -381,9 +381,9 @@ void trans() {
       }
       break;
 
-    case 8 ... 10 :
+    case 11 ... 21 :
       {
-        if (array[3] < 8)
+        if (array[3] < 118)
         {
           int cd = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -392,7 +392,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else if ( array[3] >= 8 && array[3] < 11)
+        else if ( array[3] >= 11 && array[3] < 22)
         {
           int cd = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -402,7 +402,7 @@ void trans() {
           Serial.println(array[3]);
         }
 
-        else if ( array[3] >= 11 && array[3] < 14)
+        else if ( array[3] >= 22 && array[3] <33)
         {
           int cd = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -411,7 +411,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else 
         {
           int cd = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -425,9 +425,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[3] < 8)
+        if (array[3] < 11)
         {
           int cd = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -436,7 +436,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else if ( array[3] >= 8 && array[3] < 11)
+        else if ( array[3] >= 11 && array[3] < 22)
         {
           int cd = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -446,7 +446,7 @@ void trans() {
           Serial.println(array[3]);
         }
 
-        else if ( array[3] >= 11 && array[3] < 14)
+        else if ( array[3] >= 22 && array[3] < 33)
         {
           int cd = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -455,7 +455,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else 
         {
           int cd = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -469,9 +469,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96 :
       {
-        if (array[3] < 8)
+        if (array[3] < 11 )
         {
           int cd = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -480,7 +480,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else if ( array[3] >= 8  && array[3] < 11)
+        else if ( array[3] >= 11 && array[3] < 22)
         {
           int cd = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -490,7 +490,7 @@ void trans() {
           Serial.println(array[3]);
         }
 
-        else if ( array[3] >= 11 && array[3] < 14)
+        else if ( array[3] >= 22 && array[3] < 33)
         {
           int cd = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -499,7 +499,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else 
         {
           int cd = LEDarr[15];
           digitalWrite(latch, LOW);
@@ -517,9 +517,9 @@ void trans() {
   /**************** 레지스터 3번 ****************/
   switch (array[4])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[5] < 8)
+        if (array[5] < 11)
         {
           int ef = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -528,7 +528,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else if ( array[5] >= 8 && array[5] < 11)
+        else if ( array[5] >= 11 && array[5] < 22)
         {
           int ef = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -538,7 +538,7 @@ void trans() {
           Serial.println(array[5]);
         }
 
-        else if ( array[5] >= 11 && array[5] < 14)
+        else if ( array[5] >= 22 && array[5] < 33)
         {
           int ef = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -547,7 +547,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int ef = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -561,9 +561,9 @@ void trans() {
       }
       break;
 
-    case 8 ... 10 :
+    case 11 ... 21 :
       {
-        if (array[5] < 8)
+        if (array[5] < 11)
         {
           int ef = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -572,7 +572,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else if ( array[5] >= 8 && array[5] < 11)
+        else if ( array[5] >= 11 && array[5] < 22)
         {
           int ef = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -582,7 +582,7 @@ void trans() {
           Serial.println(array[5]);
         }
 
-        else if ( array[5] >= 11 && array[5] < 14)
+        else if ( array[5] >= 22 && array[5] < 33)
         {
           int ef = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -591,7 +591,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else 
         {
           int ef = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -605,9 +605,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[5] < 8)
+        if (array[5] < 11)
         {
           int ef = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -616,7 +616,7 @@ void trans() {
           Serial.println(array[2]);
           Serial.println(array[3]);
         }
-        else if ( array[5] >= 8 && array[5] < 11)
+        else if ( array[5] >= 11 && array[5] < 22)
         {
           int ef = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -626,7 +626,7 @@ void trans() {
           Serial.println(array[5]);
         }
 
-        else if ( array[5] >= 11 && array[5] < 14)
+        else if ( array[5] >= 22 && array[5] < 33)
         {
           int ef = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -635,7 +635,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else
         {
           int ef = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -649,9 +649,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96 :
       {
-        if (array[5] < 8)
+        if (array[5] < 11)
         {
           int ef = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -660,7 +660,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else if ( array[5] >= 8  && array[5] < 11)
+        else if ( array[5] >= 11  && array[5] < 22)
         {
           int ef = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -670,7 +670,7 @@ void trans() {
           Serial.println(array[5]);
         }
 
-        else if ( array[5] >= 11 && array[5] < 14)
+        else if ( array[5] >= 22 && array[5] < 33)
         {
           int ef = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -679,7 +679,7 @@ void trans() {
           Serial.println(array[4]);
           Serial.println(array[5]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int ef = LEDarr[15];
           digitalWrite(latch, LOW);
@@ -697,9 +697,9 @@ void trans() {
   /**************** 레지스터 4번 ****************/
   switch (array[6])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[7] < 8)
+        if (array[7] < 11)
         {
           int gh = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -708,7 +708,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else if ( array[7] >= 8 && array[7] < 11)
+        else if ( array[7] >= 11 && array[7] < 22)
         {
           int gh = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -718,7 +718,7 @@ void trans() {
           Serial.println(array[7]);
         }
 
-        else if ( array[7] >= 11 && array[7] < 14)
+        else if ( array[7] >= 22 && array[7] < 33)
         {
           int gh = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -727,7 +727,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int gh = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -741,9 +741,9 @@ void trans() {
       }
       break;
 
-    case 8 ... 10 :
+    case 11 ... 21 :
       {
-        if (array[7] < 8)
+        if (array[7] < 11)
         {
           int gh = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -752,7 +752,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else if ( array[7] >= 8 && array[7] < 11)
+        else if ( array[7] >= 11 && array[7] < 22)
         {
           int gh = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -762,7 +762,7 @@ void trans() {
           Serial.println(array[7]);
         }
 
-        else if ( array[7] >= 11 && array[7] < 14)
+        else if ( array[7] >= 22 && array[7] < 33)
         {
           int gh = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -771,7 +771,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else //if ( array[7] > 191 && array[7] <= 255)
+        else
         {
           int gh = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -785,9 +785,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[7] < 8)
+        if (array[7] < 11)
         {
           int gh = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -796,7 +796,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else if ( array[7] >= 8 && array[7] < 11)
+        else if ( array[7] >= 11 && array[7] < 22)
         {
           int gh = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -806,7 +806,7 @@ void trans() {
           Serial.println(array[7]);
         }
 
-        else if ( array[7] >= 11 && array[7] < 14)
+        else if ( array[7] >= 22 && array[7] < 33)
         {
           int gh = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -815,7 +815,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else
         {
           int gh = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -829,9 +829,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96 :
       {
-        if (array[7] < 8)
+        if (array[7] < 11)
         {
           int gh = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -840,7 +840,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else if ( array[7] >= 8  && array[7] < 11)
+        else if ( array[7] >= 11 && array[7] < 22)
         {
           int gh = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -850,7 +850,7 @@ void trans() {
           Serial.println(array[7]);
         }
 
-        else if ( array[7] >= 11 && array[7] < 14)
+        else if ( array[7] >= 22 && array[7] < 33)
         {
           int gh = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -859,7 +859,7 @@ void trans() {
           Serial.println(array[6]);
           Serial.println(array[7]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else 
         {
           int gh = LEDarr[15];
           digitalWrite(latch, LOW);
@@ -877,9 +877,9 @@ void trans() {
   /**************** 레지스터 5번 ****************/
   switch (array[8])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[9] < 8)
+        if (array[9] < 11)
         {
           int ij = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -888,7 +888,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else if ( array[9] >= 8 && array[9] < 11)
+        else if ( array[9] >= 11 && array[9] < 22)
         {
           int ij = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -898,7 +898,7 @@ void trans() {
           Serial.println(array[9]);
         }
 
-        else if ( array[9] >= 11 && array[9] < 14)
+        else if ( array[9] >= 22 && array[9] < 33)
         {
           int ij = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -907,7 +907,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int ij = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -921,9 +921,9 @@ void trans() {
       }
       break;
 
-    case 8 ... 10 :
+    case 11 ... 21 :
       {
-        if (array[9] < 8)
+        if (array[9] < 11)
         {
           int ij = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -932,7 +932,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else if ( array[9] >= 8 && array[9] < 11)
+        else if ( array[9] >= 11 && array[9] < 22)
         {
           int ij = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -942,7 +942,7 @@ void trans() {
           Serial.println(array[9]);
         }
 
-        else if ( array[9] >= 11 && array[9] < 14)
+        else if ( array[9] >= 22 && array[9] < 33)
         {
           int ij = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -951,7 +951,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else 
         {
           int ij = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -965,9 +965,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[9] < 8)
+        if (array[9] < 11)
         {
           int ij = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -976,7 +976,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else if ( array[9] >= 8 && array[9] < 11)
+        else if ( array[9] >= 11 && array[9] < 22)
         {
           int ij = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -986,7 +986,7 @@ void trans() {
           Serial.println(array[9]);
         }
 
-        else if ( array[9] >= 11 && array[9] < 14)
+        else if ( array[9] >= 22 && array[9] < 33)
         {
           int ij = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -995,7 +995,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else
         {
           int ij = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -1009,9 +1009,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96 :
       {
-        if (array[9] < 8)
+        if (array[9] < 11)
         {
           int ij = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -1020,7 +1020,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else if ( array[9] >= 8  && array[9] < 11)
+        else if ( array[9] >= 11  && array[9] < 22)
         {
           int ij = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -1030,7 +1030,7 @@ void trans() {
           Serial.println(array[9]);
         }
 
-        else if ( array[9] >= 11 && array[9] < 14)
+        else if ( array[9] >=22 && array[9] <33)
         {
           int ij = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -1039,7 +1039,7 @@ void trans() {
           Serial.println(array[8]);
           Serial.println(array[9]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int ij = LEDarr[15];
           digitalWrite(latch, LOW);
@@ -1057,9 +1057,9 @@ void trans() {
   /**************** 레지스터 6번 ****************/
   switch (array[10])
   {
-    case 0 ... 7 :
+    case 0 ... 10 :
       {
-        if (array[11] < 8)
+        if (array[11] < 11)
         {
           int kl = LEDarr[0];
           digitalWrite(latch, LOW);
@@ -1068,7 +1068,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else if ( array[11] >= 8 && array[11] < 11)
+        else if ( array[11] >= 11 && array[11] < 22)
         {
           int kl = LEDarr[1];
           digitalWrite(latch, LOW);
@@ -1078,7 +1078,7 @@ void trans() {
           Serial.println(array[11]);
         }
 
-        else if ( array[11] >= 11 && array[11] < 14)
+        else if ( array[11] >= 22 && array[11] <33)
         {
           int kl = LEDarr[2];
           digitalWrite(latch, LOW);
@@ -1087,7 +1087,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int kl = LEDarr[3];
           digitalWrite(latch, LOW);
@@ -1101,9 +1101,9 @@ void trans() {
       }
       break;
 
-    case 8 ... 10 :
+    case 11 ... 21 :
       {
-        if (array[11] < 8)
+        if (array[11] < 11)
         {
           int kl = LEDarr[4];
           digitalWrite(latch, LOW);
@@ -1112,7 +1112,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else if ( array[11] >= 8 && array[11] < 11)
+        else if ( array[11] >= 11 && array[11] < 22)
         {
           int kl = LEDarr[5];
           digitalWrite(latch, LOW);
@@ -1122,7 +1122,7 @@ void trans() {
           Serial.println(array[11]);
         }
 
-        else if ( array[11] >= 11 && array[11] < 14)
+        else if ( array[11] >= 22 && array[11] < 33)
         {
           int kl = LEDarr[6];
           digitalWrite(latch, LOW);
@@ -1131,7 +1131,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int kl = LEDarr[7];
           digitalWrite(latch, LOW);
@@ -1145,9 +1145,9 @@ void trans() {
       }
       break;
 
-    case 11 ... 13 :
+    case 22 ... 32 :
       {
-        if (array[11] < 8)
+        if (array[11] < 11)
         {
           int kl = LEDarr[8];
           digitalWrite(latch, LOW);
@@ -1156,7 +1156,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else if ( array[11] >= 8 && array[11] < 11)
+        else if ( array[11] >= 11 && array[11] < 22)
         {
           int kl = LEDarr[9];
           digitalWrite(latch, LOW);
@@ -1166,7 +1166,7 @@ void trans() {
           Serial.println(array[11]);
         }
 
-        else if ( array[11] >= 11 && array[11] < 14)
+        else if ( array[11] >=22 && array[11] < 33)
         {
           int kl = LEDarr[10];
           digitalWrite(latch, LOW);
@@ -1175,7 +1175,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else //if ( array[3] > 191 && array[3] <= 255)
+        else
         {
           int kl = LEDarr[11];
           digitalWrite(latch, LOW);
@@ -1189,9 +1189,9 @@ void trans() {
       }
       break;
 
-    case 14 ... 30 :
+    case 33 ... 96 :
       {
-        if (array[11] < 8)
+        if (array[11] < 11)
         {
           int kl = LEDarr[12];
           digitalWrite(latch, LOW);
@@ -1200,7 +1200,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else if ( array[11] >= 8  && array[11] < 11)
+        else if ( array[11] >=11  && array[11] < 22)
         {
           int kl = LEDarr[13];
           digitalWrite(latch, LOW);
@@ -1210,7 +1210,7 @@ void trans() {
           Serial.println(array[11]);
         }
 
-        else if ( array[11] >= 11 && array[11] < 14)
+        else if ( array[11] >=22 && array[11] < 33)
         {
           int kl = LEDarr[14];
           digitalWrite(latch, LOW);
@@ -1219,7 +1219,7 @@ void trans() {
           Serial.println(array[10]);
           Serial.println(array[11]);
         }
-        else //if ( array[5] > 191 && array[5] <= 255)
+        else
         {
           int kl = LEDarr[15];
           digitalWrite(latch, LOW);
