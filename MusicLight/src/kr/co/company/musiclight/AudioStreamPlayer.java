@@ -344,7 +344,7 @@ public class AudioStreamPlayer extends Activity
 					}
 					avg = (byte) (sum / 25);
 					a = a + 25;
-					xxx[i] = (byte)((avg+10)*3);
+					xxx[i] = (byte)((avg+6)*3);
 
 				}
 				
@@ -810,6 +810,7 @@ public class AudioStreamPlayer extends Activity
 			}
 		});
 
+		
 	}
 
 	public void onProgressUpdate(double[]... toTransform) {
