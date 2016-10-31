@@ -344,7 +344,7 @@ public class AudioStreamPlayer extends Activity
 					}
 					avg = (byte) (sum / 25);
 					a = a + 25;
-					xxx[i] = (byte)(avg+10);
+					xxx[i] = (byte)((avg+10)*3);
 
 				}
 				
@@ -697,110 +697,110 @@ public class AudioStreamPlayer extends Activity
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				if (xxx[1] < 8)
+				if (xxx[1] < 11)
 					b1.setImageResource(R.drawable.white);
-				else if (xxx[1] >= 8 && xxx[1] < 11)
+				else if (xxx[1] >= 11 && xxx[1] < 22)
 					b1.setImageResource(R.drawable.red);
-				else if (xxx[1] >=11 && xxx[1] < 14)
+				else if (xxx[1] >=22 && xxx[1] < 33)
 					b1.setImageResource(R.drawable.green);
 				else
 					b1.setImageResource(R.drawable.blue);
 				
-				if (xxx[3] <8)
+				if (xxx[3] <11)
 					b2.setImageResource(R.drawable.white);
-				else if (xxx[3] >=8 && xxx[3] < 11)
+				else if (xxx[3] >=11 && xxx[3] < 22)
 					b2.setImageResource(R.drawable.red);
-				else if (xxx[3] >=11 && xxx[3] < 14)
+				else if (xxx[3] >=22 && xxx[3] < 33)
 					b2.setImageResource(R.drawable.green);
 				else
 					b2.setImageResource(R.drawable.blue);
 				
-				if (xxx[5] < 8)
+				if (xxx[5] < 11)
 					b3.setImageResource(R.drawable.white);
-				else if (xxx[5] >= 8 && xxx[5] < 11)
+				else if (xxx[5] >= 11 && xxx[5] < 22)
 					b3.setImageResource(R.drawable.red);
-				else if (xxx[5] >=11 && xxx[5] < 14)
+				else if (xxx[5] >=22 && xxx[5] < 33)
 					b3.setImageResource(R.drawable.green);
 				else
 					b3.setImageResource(R.drawable.blue);
 				
-				if (xxx[7] < 8)
+				if (xxx[7] < 11)
 					b4.setImageResource(R.drawable.white);
-				else if (xxx[7] >= 8 && xxx[7] < 11)
+				else if (xxx[7] >= 11 && xxx[7] < 22)
 					b4.setImageResource(R.drawable.red);
-				else if (xxx[7] >=11 && xxx[7] < 14)
+				else if (xxx[7] >=22 && xxx[7] < 33)
 					b4.setImageResource(R.drawable.green);
 				else
 					b4.setImageResource(R.drawable.blue);
 				
-				if (xxx[9] <8)
+				if (xxx[9] <11)
 					b5.setImageResource(R.drawable.white);
-				else if (xxx[9] >= 8 && xxx[9] < 11)
+				else if (xxx[9] >= 11 && xxx[9] < 22)
 					b5.setImageResource(R.drawable.red);
-				else if (xxx[9] >=11 && xxx[9] <14)
+				else if (xxx[9] >=22 && xxx[9] <33)
 					b5.setImageResource(R.drawable.green);
 				else
 					b5.setImageResource(R.drawable.blue);
 				
-				if (xxx[11] < 8)
+				if (xxx[11] < 11)
 					b6.setImageResource(R.drawable.white);
-				else if (xxx[11] >= 8 && xxx[11] < 11)
+				else if (xxx[11] >= 11 && xxx[11] < 22)
 					b6.setImageResource(R.drawable.red);
-				else if (xxx[11] >=11 && xxx[11] < 14)
+				else if (xxx[11] >=22 && xxx[11] < 33)
 					b6.setImageResource(R.drawable.green);
 				else
 					b6.setImageResource(R.drawable.blue);
 				
-				if (xxx[13] < 8)
+				if (xxx[13] < 11)
 					b7.setImageResource(R.drawable.white);
-				else if (xxx[13] >= 8 && xxx[13] < 11)
+				else if (xxx[13] >= 11 && xxx[13] < 22)
 					b7.setImageResource(R.drawable.red);
-				else if (xxx[13] >=11 && xxx[13] < 14)
+				else if (xxx[13] >=22 && xxx[13] < 33)
 					b7.setImageResource(R.drawable.green);
 				else
 					b7.setImageResource(R.drawable.blue);
 				
-				if (xxx[15] < 8)
+				if (xxx[15] < 11)
 					b8.setImageResource(R.drawable.white);
-				else if (xxx[15] >= 8 && xxx[15] <11)
+				else if (xxx[15] >= 11 && xxx[15] <22)
 					b8.setImageResource(R.drawable.red);
-				else if (xxx[15] >=11 && xxx[15] < 14)
+				else if (xxx[15] >=22 && xxx[15] < 33)
 					b8.setImageResource(R.drawable.green);
 				else
 					b8.setImageResource(R.drawable.blue);
 				
-				if (xxx[17] <8)
+				if (xxx[17] <11)
 					b9.setImageResource(R.drawable.white);
-				else if (xxx[17] >= 8 && xxx[17] < 11)
+				else if (xxx[17] >= 11 && xxx[17] < 22)
 					b9.setImageResource(R.drawable.red);
-				else if (xxx[17] >=11&& xxx[17] < 14)
+				else if (xxx[17] >=22&& xxx[17] < 33)
 					b9.setImageResource(R.drawable.green);
 				else
 					b9.setImageResource(R.drawable.blue);
 				
-				if (xxx[19] <8)
+				if (xxx[19] <11)
 					b10.setImageResource(R.drawable.white);
-				else if (xxx[19] >= 8&& xxx[19] <11)
+				else if (xxx[19] >= 11&& xxx[19] <22)
 					b10.setImageResource(R.drawable.red);
-				else if (xxx[19] >=11 && xxx[19] < 14)
+				else if (xxx[19] >=22 && xxx[19] < 33)
 					b10.setImageResource(R.drawable.green);
 				else
 					b10.setImageResource(R.drawable.blue);
 				
-				if (xxx[21] <8)
+				if (xxx[21] <11)
 					b11.setImageResource(R.drawable.white);
-				else if (xxx[21] >= 8&& xxx[21] < 11)
+				else if (xxx[21] >= 11&& xxx[21] < 22)
 					b11.setImageResource(R.drawable.red);
-				else if (xxx[21] >=11 && xxx[21] < 14)
+				else if (xxx[21] >=22 && xxx[21] < 33)
 					b11.setImageResource(R.drawable.green);
 				else
 					b11.setImageResource(R.drawable.blue);
 				
-				if (xxx[23] < 8)
+				if (xxx[23] < 11)
 					b12.setImageResource(R.drawable.white);
-				else if (xxx[23] >= 8 && xxx[23] < 11)
+				else if (xxx[23] >= 11 && xxx[23] < 22)
 					b12.setImageResource(R.drawable.red);
-				else if (xxx[23] >=11 && xxx[23] < 14)
+				else if (xxx[23] >=22 && xxx[23] < 33)
 					b12.setImageResource(R.drawable.green);
 				else
 					b12.setImageResource(R.drawable.blue);
